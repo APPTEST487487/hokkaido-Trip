@@ -1,0 +1,2582 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0e3a4d">
+    <title>北海道雪國自駕之旅</title>
+    <style>
+        :root {
+            --ice: #3aa7c9;
+            --ice-deep: #0e3a4d;
+            --aurora: #5eead4;
+            --snow: #f4f8fb;
+            --paper: #ffffff;
+            --ink: #163044;
+            --muted: #5b7384;
+            --line: #d7e4ed;
+            --warm: #c9842a;
+            --warm-soft: #fff4e0;
+            --danger: #c2414a;
+            --ok: #2f8a6a;
+            --shadow: 0 18px 50px rgba(14, 58, 77, 0.12);
+            --radius: 22px;
+            --font: "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+        }
+        html.dark {
+            --snow: #0b1620;
+            --paper: #132230;
+            --ink: #e8f2f7;
+            --muted: #9bb3c3;
+            --line: #243746;
+            --warm-soft: #3a2d18;
+            --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; min-height: 100%; }
+        html { min-height: 100vh; min-height: 100svh; }
+        body {
+            font-family: var(--font);
+            background:
+                radial-gradient(1200px 500px at 100% -10%, rgba(58, 167, 201, 0.16), transparent 50%),
+                radial-gradient(900px 400px at -10% 110%, rgba(201, 132, 42, 0.08), transparent 45%),
+                var(--snow);
+            color: var(--ink);
+            padding-bottom: 88px;
+            min-height: 100vh;
+            min-height: 100svh;
+        }
+        button, input, select, textarea { font-family: inherit; }
+        button { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+        a { -webkit-tap-highlight-color: transparent; }
+        :focus-visible { outline: 3px solid var(--aurora); outline-offset: 3px; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+        }
+        .wrap { max-width: 1120px; margin: 0 auto; padding: 22px 18px 8px; }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ice);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        h1 { margin: 6px 0 0; font-size: clamp(24px, 4vw, 34px); letter-spacing: -0.03em; overflow-wrap: anywhere; }
+        .sub { margin: 6px 0 0; color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+        .actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+        .icon-btn, .btn, .btn-primary, .btn-ghost {
+            border: 1px solid var(--line);
+            background: var(--paper);
+            color: var(--ink);
+            border-radius: 14px;
+            padding: 10px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.18s ease;
+        }
+        .icon-btn { width: 42px; height: 42px; justify-content: center; padding: 0; }
+        .btn:hover, .icon-btn:hover, .btn-ghost:hover { transform: translateY(-1px); border-color: var(--ice); }
+        .btn-primary {
+            background: linear-gradient(180deg, #2f97b8, #1d7a99);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 20px rgba(29, 122, 153, 0.28);
+        }
+        .menu { position: relative; }
+        .menu-list {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            min-width: 180px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            z-index: 20;
+        }
+        .menu.open .menu-list { display: grid; }
+        .menu-list button {
+            border: 0;
+            background: transparent;
+            color: inherit;
+            text-align: left;
+            padding: 11px 14px;
+            font-size: 13px;
+        }
+        .menu-list button:hover { background: rgba(58, 167, 201, 0.1); }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            border-radius: 32px;
+            padding: 28px;
+            color: #f4fbff;
+            background:
+                radial-gradient(700px 280px at 90% 0%, rgba(94, 234, 212, 0.28), transparent 55%),
+                radial-gradient(500px 240px at 0% 100%, rgba(201, 132, 42, 0.22), transparent 50%),
+                linear-gradient(135deg, #0b3042 0%, #164e68 48%, #0f2a3c 100%);
+            box-shadow: var(--shadow);
+            margin-bottom: 22px;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: auto -40px -80px auto;
+            width: 260px;
+            height: 260px;
+            border: 18px solid rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+        .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.6fr 0.9fr; gap: 22px; align-items: center; }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.14);
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .hero h2 { margin: 12px 0 10px; font-size: clamp(26px, 5vw, 40px); line-height: 1.15; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 12px; color: #d7eef7; font-size: 14px; }
+        .hero p { margin: 14px 0 0; color: rgba(244,251,255,0.82); max-width: 62ch; }
+        .stats {
+            display: grid;
+            gap: 10px;
+            background: rgba(8, 24, 34, 0.28);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 22px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+        }
+        .stat { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+        .stat b { font-size: 22px; color: #ffe08a; }
+        .stat span { color: #cfe7f1; font-size: 12px; }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            padding: 6px;
+            background: rgba(255,255,255,0.55);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            margin-bottom: 18px;
+            overflow-x: auto;
+        }
+        html.dark .tabs { background: rgba(19, 34, 48, 0.7); }
+        .tab {
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .tab.active { background: var(--paper); color: var(--ice-deep); box-shadow: 0 6px 16px rgba(14,58,77,0.08); }
+        html.dark .tab.active { color: var(--ink); }
+
+        .toolbar { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+        .days { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+        .day {
+            scroll-snap-align: start;
+            min-width: 92px;
+            border: 1px solid var(--line);
+            background: var(--paper);
+            border-radius: 16px;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        .day small { display: block; color: var(--muted); font-size: 11px; }
+        .day b { display: block; font-size: 14px; margin: 2px 0; }
+        .day em { font-style: normal; color: var(--ice); font-size: 11px; font-weight: 700; }
+        .day.active { background: var(--ice-deep); color: white; border-color: var(--ice-deep); }
+        .day.active small, .day.active em { color: #bfe9f6; }
+        .day.today { outline: 2px solid var(--aurora); }
+        select, input, textarea {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: var(--paper);
+            color: var(--ink);
+            border-radius: 14px;
+            padding: 11px 12px;
+            font-size: 14px;
+        }
+        textarea { resize: vertical; min-height: 92px; }
+        .filter { width: auto; min-width: 150px; }
+
+        .timeline { position: relative; display: grid; gap: 12px; }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 36px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(var(--ice), transparent);
+            opacity: 0.35;
+        }
+        .stop {
+            position: relative;
+            display: grid;
+            grid-template-columns: 86px minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: start;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 14px;
+            box-shadow: 0 10px 24px rgba(14,58,77,0.04);
+        }
+        .stop > div:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
+        .stop h3, .mapcode-entry, .mapcode-entry a { overflow-wrap: anywhere; }
+        .stop.parking { background: linear-gradient(180deg, var(--warm-soft), var(--paper)); border-color: #efd09a; }
+        html.dark .stop.parking { border-color: #705728; }
+        .time {
+            background: #e7f5fb;
+            color: var(--ice-deep);
+            border-radius: 14px;
+            padding: 10px 8px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 13px;
+        }
+        html.dark .time { background: #1b3342; color: #d7f3ff; }
+        .badge { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 3px 8px; font-size: 11px; font-weight: 800; }
+        .c-Sightseeing { background: #d9f6ee; color: #0f6b57; }
+        .c-Food { background: #ffe4d6; color: #9a3b16; }
+        .c-Parking { background: #fff0cc; color: #8a5a12; }
+        .c-Hotel { background: #e3e4ff; color: #3d3f9a; }
+        .c-Transport { background: #dcecff; color: #1d4f86; }
+        .c-Shopping { background: #ffe0ea; color: #9a2454; }
+        html.dark .c-Sightseeing { background: #173c36; color: #a7ead5; }
+        html.dark .c-Food { background: #482d24; color: #ffc09e; }
+        html.dark .c-Parking { background: #463719; color: #f3d28a; }
+        html.dark .c-Hotel { background: #292b50; color: #c9caff; }
+        html.dark .c-Transport { background: #1b344c; color: #b6d8ff; }
+        html.dark .c-Shopping { background: #462638; color: #ffc0d6; }
+        .stop h3 { margin: 6px 0 0; font-size: 16px; }
+        .note-chip {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: #f3f8fb;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+        .note-chip.parking-note {
+            color: var(--ink);
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.65;
+        }
+        .stop.parking .note-chip { background: rgba(201, 132, 42, 0.12); color: #7a5414; }
+        html.dark .stop.parking .note-chip { color: #f3d28a; }
+        .mapcodes {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .mapcode-entry {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 4px 12px;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--snow);
+        }
+        .mapcode-entry span { color: var(--muted); font-size: 12px; }
+        .mapcode-entry .location-mapcode-label {
+            color: var(--ink);
+            font-size: 16px;
+            font-weight: 750;
+            line-height: 1.5;
+        }
+        .mapcode-entry code {
+            grid-column: 1;
+            color: var(--ink);
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+        }
+        .mapcode-entry .mapcode-links {
+            grid-column: 2;
+            grid-row: 1 / span 2;
+            align-self: center;
+            display: grid;
+            justify-items: end;
+            gap: 4px;
+        }
+        .mapcode-entry a { color: var(--ice); font-size: 14px; font-weight: 700; }
+        .mapcode-entry .unverified { color: var(--muted); font-size: 13px; font-weight: 600; }
+        html.dark .note-chip { background: #0f1c26; color: var(--muted); }
+        .ghost { display: flex; gap: 6px; }
+        .ghost button { border: 0; background: transparent; color: var(--muted); width: 34px; height: 34px; border-radius: 10px; }
+        .ghost button:hover { background: rgba(58,167,201,0.12); color: var(--ink); }
+        .empty {
+            border: 1.5px dashed var(--line);
+            border-radius: 22px;
+            padding: 48px 16px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .tickets { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .ticket {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+        .ticket-top { display: flex; justify-content: space-between; padding: 16px 18px 8px; }
+        .route {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 8px 18px 18px;
+            gap: 8px;
+        }
+        .route > div { min-width: 0; overflow-wrap: anywhere; }
+        .iata { font-size: 34px; font-weight: 900; letter-spacing: -0.04em; }
+        .city { color: var(--muted); font-size: 12px; margin-top: 2px; }
+        .clock { color: var(--ice); font-weight: 800; margin-top: 6px; }
+        .plane-line { color: var(--ice); text-align: center; font-weight: 800; }
+
+        .notes-layout { display: grid; grid-template-columns: 1.5fr 0.9fr; gap: 16px; }
+        .notes-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        .note-card {
+            background: linear-gradient(180deg, #fffaf0, var(--paper));
+            border: 1px solid #ead9b2;
+            border-radius: 20px;
+            padding: 22px;
+        }
+        html.dark .note-card { background: #1b2a36; border-color: var(--line); }
+        .note-card h3 { margin: 0 8px 12px 0; font-size: 18px; line-height: 1.45; }
+        .note-card p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink); font-size: 16px; line-height: 1.85; letter-spacing: 0.015em; }
+        .pack {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 18px;
+        }
+        .expense-panel {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 20px;
+        }
+        .expense-music-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.8fr);
+            align-items: start;
+            gap: 16px;
+        }
+        .expense-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .expense-total {
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: var(--snow);
+        }
+        .expense-total span { display: block; color: var(--muted); font-size: 13px; }
+        .expense-total strong { display: block; margin-top: 6px; font-size: 20px; overflow-wrap: anywhere; }
+        .expense-form {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: end;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: var(--snow);
+        }
+        .expense-form label { display: grid; gap: 6px; color: var(--muted); font-size: 13px; font-weight: 700; }
+        .expense-form input, .expense-form select, .expense-day-select {
+            min-width: 0;
+            padding: 10px 11px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--paper);
+            color: var(--ink);
+            font-size: 14px;
+        }
+        .expense-list { display: grid; gap: 8px; margin-top: 16px; }
+        .expense-row {
+            display: grid;
+            grid-template-columns: 90px minmax(0, 1fr) 120px auto;
+            gap: 10px;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+        }
+        .expense-person { font-weight: 800; }
+        .expense-description { min-width: 0; overflow-wrap: anywhere; }
+        .expense-description small { display: block; margin-top: 3px; color: var(--muted); }
+        .expense-amount { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+        .expense-row-actions { display: flex; gap: 4px; }
+        .expense-row-actions button {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: var(--muted);
+        }
+        .expense-row-actions button:hover { background: rgba(58,167,201,0.12); color: var(--ink); }
+        .expense-footnote { margin: 12px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+        .music-panel {
+            min-width: 0;
+            padding: 20px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+        }
+        .music-form { display: grid; gap: 10px; margin: 16px 0; }
+        .music-form label { display: grid; gap: 6px; color: var(--muted); font-size: 13px; font-weight: 700; }
+        .music-form input {
+            min-width: 0;
+            padding: 10px 11px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--paper);
+            color: var(--ink);
+            font-size: 14px;
+        }
+        .music-list { display: grid; gap: 8px; }
+        .music-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            padding: 10px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+        }
+        .music-artwork {
+            position: relative;
+            display: grid;
+            flex: 0 0 52px;
+            width: 52px;
+            height: 52px;
+            place-items: center;
+            overflow: hidden;
+            border-radius: 10px;
+            background: linear-gradient(145deg, rgba(58,167,201,0.2), rgba(94,234,212,0.35));
+            color: var(--ice-deep);
+            font-size: 24px;
+        }
+        .music-artwork img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .music-row-info { flex: 1; min-width: 0; }
+        .music-row-info a {
+            display: block;
+            overflow: hidden;
+            color: var(--ink);
+            font-weight: 700;
+            text-decoration: none;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .music-row-info a:hover { color: var(--ice); }
+        .music-row-info small { display: block; margin-top: 3px; color: var(--muted); }
+        .music-row-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 2px; }
+        .music-row-actions button {
+            width: 32px;
+            height: 32px;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: var(--muted);
+        }
+        .music-row-actions button:hover:not(:disabled) { background: rgba(58,167,201,0.12); color: var(--ink); }
+        .music-row-actions button:disabled { opacity: 0.35; cursor: default; }
+        .music-delete {
+            flex: 0 0 auto;
+        }
+        .music-delete:hover { background: rgba(58,167,201,0.12); color: var(--ink); }
+        .music-fallback {
+            display: grid;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--snow);
+        }
+        .music-fallback[hidden] { display: none; }
+        .music-fallback p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+        .music-fallback label { display: grid; gap: 6px; color: var(--muted); font-size: 13px; font-weight: 700; }
+        .music-fallback input {
+            min-width: 0;
+            padding: 10px 11px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--paper);
+            color: var(--ink);
+            font-size: 14px;
+        }
+        .music-fallback-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+        .progress-wrap { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; margin: 10px 0 14px; }
+        .progress { height: 100%; background: linear-gradient(90deg, var(--ice), var(--aurora)); transition: width 0.3s ease; }
+        .todo select { width: auto; min-width: 80px; }
+        .todo { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            margin-bottom: 14px; 
+        }
+        .todo input {
+            flex: 1;
+            margin: 0;
+        }
+        .todo button {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        #checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .check-row { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            padding: 8px 10px;
+            border-radius: 12px;
+            transition: background-color 0.15s ease;
+            cursor: grab;
+            touch-action: pan-y;
+        }
+        .check-row.dragging { opacity: 0.45; cursor: grabbing; }
+        .check-row.drag-over { box-shadow: inset 0 2px var(--ice); }
+        .check-row .item-group {
+            flex: 0 0 auto;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(58, 167, 201, 0.12);
+            color: var(--ice-deep);
+            font-size: 11px;
+            font-weight: 800;
+        }
+        html.dark .check-row .item-group { color: #d7f3ff; }
+        .check-row:hover {
+            background: rgba(58, 167, 201, 0.05);
+        }
+        .check-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .check-row span { 
+            font-size: 14px;
+            color: var(--ink);
+            flex: 1;
+            text-align: left;
+            word-break: break-word;
+        }
+        .check-row.done span { 
+            color: var(--muted); 
+            text-decoration: line-through; 
+        }
+        .check-row .btn-del {
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            cursor: pointer;
+            margin-left: auto;
+            transition: all 0.15s ease;
+        }
+        .check-row .btn-del:hover {
+            background: rgba(194, 65, 74, 0.12);
+            color: var(--danger);
+        }
+        .check-row .move-item {
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .check-row .move-item:hover { background: rgba(58, 167, 201, 0.12); color: var(--ink); }
+        @media (hover: none) and (pointer: coarse) {
+            .check-row .move-item { display: none; }
+        }
+
+        .nav-mobile {
+            display: none;
+            position: fixed;
+            left: max(12px, env(safe-area-inset-left));
+            right: max(12px, env(safe-area-inset-right));
+            bottom: max(16px, env(safe-area-inset-bottom));
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            padding: 8px;
+            z-index: 30;
+        }
+        .nav-mobile button { flex: 1; border: 0; background: transparent; color: var(--muted); padding: 10px 6px; border-radius: 14px; font-size: 12px; font-weight: 700; }
+        .nav-mobile button.active { background: #e7f5fb; color: var(--ice-deep); }
+        html.dark .nav-mobile button.active { background: #1b3342; color: #d7f3ff; }
+
+        .modal {
+            position: fixed; inset: 0;
+            height: 100vh; height: 100dvh;
+            background: rgba(8, 20, 28, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 50;
+        }
+        .modal.open { display: flex; }
+        .sheet {
+            width: min(520px, 100%);
+            background: var(--paper);
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid var(--line);
+            max-height: 90vh;
+            max-height: 90dvh;
+            overflow: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+        .form-grid { display: grid; gap: 12px; }
+        .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .row-end { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+        .toast {
+            position: fixed; right: 16px; bottom: calc(84px + env(safe-area-inset-bottom));
+            display: none; align-items: center; flex-wrap: wrap; gap: 12px;
+            max-width: min(520px, calc(100vw - 32px));
+            background: var(--ice-deep); color: white;
+            padding: 12px 14px; border-radius: 14px;
+            z-index: 60; font-size: 14px; line-height: 1.5;
+            overflow-wrap: anywhere; box-shadow: var(--shadow);
+        }
+        .toast.error { background: #8f2933; }
+        .toast.warning { background: #775118; }
+        #toast-message { flex: 1 1 220px; min-width: 0; }
+        .toast-action {
+            flex: 0 0 auto; border: 1px solid rgba(255,255,255,0.55);
+            border-radius: 10px; padding: 8px 12px; color: white;
+            background: rgba(255,255,255,0.12); font-weight: 700;
+        }
+        .connection-status {
+            margin: 0 0 14px; padding: 12px 14px;
+            border: 1px solid #e8bb67; border-radius: 14px;
+            background: var(--warm-soft); color: var(--ink);
+            font-size: 14px; line-height: 1.55;
+        }
+        .connection-status[hidden] { display: none; }
+        .map-link {
+            display: inline-flex;
+            margin-top: 8px;
+            color: var(--ice);
+            font-size: 12px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+        .hidden { display: none !important; }
+        svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .icon-btn svg, .ghost svg { width: 16px; height: 16px; }
+
+        @media (max-width: 860px) {
+            .hero-grid, .tickets, .notes-layout, .notes-grid, .two { grid-template-columns: 1fr; }
+            .topbar { flex-direction: column; }
+            .topbar > .actions { justify-content: flex-start; }
+            .expense-music-layout { grid-template-columns: 1fr; }
+            .expense-form { grid-template-columns: 1fr 1fr; }
+            .expense-form .expense-form-action { grid-column: 1 / -1; }
+            .tabs { display: none; }
+            .nav-mobile { display: flex; }
+            .timeline::before { display: none; }
+            .stop { grid-template-columns: 72px 1fr; }
+            .ghost { grid-column: 1 / -1; justify-content: flex-end; }
+        }
+        @media (max-width: 520px) {
+            body { padding-bottom: calc(104px + max(16px, env(safe-area-inset-bottom))); }
+            .wrap { padding: 16px 12px 8px; }
+            .topbar { gap: 12px; }
+            .topbar > .actions { width: 100%; }
+            .hero { padding: 20px; border-radius: 24px; }
+            .toolbar { align-items: stretch; }
+            .toolbar > .actions { width: 100%; justify-content: stretch; }
+            .toolbar > .actions > * { flex: 1; }
+            .toolbar .expense-day-label, .expense-day-label { width: 100%; }
+            select, input, textarea,
+            .expense-form input, .expense-form select, .expense-day-select,
+            .music-form input, .music-fallback input,
+            .form-grid input, .form-grid select, .form-grid textarea { font-size: 16px; }
+            button, .btn, .btn-primary, .btn-ghost { min-height: 44px; }
+            .icon-btn { width: 44px; height: 44px; }
+            .ghost button, .expense-row-actions button { min-width: 44px; min-height: 44px; }
+            .day { min-height: 60px; }
+            .stop { grid-template-columns: 64px minmax(0, 1fr); gap: 8px; padding: 12px; }
+            .time { padding: 9px 4px; font-size: 12px; }
+            .note-chip, .note-chip.parking-note { font-size: 14px; line-height: 1.6; }
+            .mapcode-entry { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+            .mapcode-entry > div:last-child { display: flex; flex-wrap: wrap; justify-items: start; gap: 8px; }
+            .expense-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .expense-row { grid-template-columns: 1fr auto; gap: 6px 10px; }
+            .expense-person, .expense-description { grid-column: 1; }
+            .expense-amount { grid-column: 2; grid-row: 1 / span 2; }
+            .expense-row-actions { grid-column: 1 / -1; justify-content: flex-end; }
+            .expense-panel, .music-panel, .pack { padding: 16px; border-radius: 20px; }
+            .expense-form { grid-template-columns: minmax(0, 1fr); }
+            .expense-form .expense-form-action { display: flex; flex-wrap: wrap; gap: 8px; }
+            .expense-form-action button { flex: 1; }
+            .music-row { gap: 8px; padding: 8px; }
+            .music-artwork { flex-basis: 44px; width: 44px; height: 44px; }
+            .music-row-actions { gap: 0; }
+            .music-row-actions button { width: 44px; height: 44px; }
+            .row-end { flex-wrap: wrap; }
+            .row-end button { flex: 1; }
+            .sheet { padding: 16px; border-radius: 20px; max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+            .nav-mobile {
+                left: max(8px, env(safe-area-inset-left));
+                right: max(8px, env(safe-area-inset-right));
+                bottom: max(16px, env(safe-area-inset-bottom));
+                padding: 6px;
+            }
+            .nav-mobile button { min-height: 48px; font-size: 13px; }
+            .mobile-keyboard-open .nav-mobile { display: none; }
+            .modal { padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)); }
+            .sheet {
+                max-height: calc(100vh - 24px);
+                max-height: calc(100dvh - max(24px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+            }
+            .toast {
+                left: 12px; right: 12px;
+                bottom: calc(88px + max(16px, env(safe-area-inset-bottom)));
+                max-width: none;
+            }
+        }
+        @media (max-width: 360px) {
+            .expense-summary { grid-template-columns: minmax(0, 1fr); }
+            .music-artwork { flex-basis: 38px; width: 38px; height: 38px; }
+            .music-row { flex-wrap: wrap; }
+            .music-row-actions { flex-basis: 100%; justify-content: flex-end; }
+            .music-row-actions button { width: 44px; }
+        }
+        @media print {
+            body { background: white; padding: 0; color: black; }
+            .no-print, .nav-mobile, .toast, .modal, .ghost, .actions, .tabs { display: none !important; }
+            .tab-content { display: block !important; }
+            .wrap { max-width: none; }
+            .stop, .ticket, .note-card { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header class="topbar">
+            <div>
+                <div class="eyebrow">Hokkaido winter drive</div>
+                <h1 id="header-trip-title">北海道冬日雪國自駕之旅</h1>
+                <p class="sub">10 天 9 夜 · 停車備忘 · 航班與需要準備的物品清單，可離線開啟</p>
+            </div>
+            <div class="actions no-print">
+                <button class="icon-btn" onclick="toggleDarkMode()" title="深色模式" aria-label="切換深色模式">
+                    <span id="theme-icon"></span>
+                </button>
+                <button class="btn" onclick="openEditTripModal()">編輯總覽</button>
+                <div class="menu" id="more-menu">
+                    <button class="btn-ghost" id="more-menu-toggle" aria-expanded="false" aria-controls="more-menu-list" onclick="toggleMenu()">更多</button>
+                    <div class="menu-list" id="more-menu-list">
+                        <button type="button" onclick="exportData()">匯出備份</button>
+                        <button type="button" onclick="document.getElementById('import-file').click()">匯入備份</button>
+                        <button type="button" onclick="window.print()">列印行程</button>
+                        <button type="button" onclick="resetToSampleData()">恢復初始行程</button>
+                    </div>
+                </div>
+                <input id="import-file" type="file" accept="application/json" class="hidden" onchange="importData(event)">
+            </div>
+        </header>
+
+        <div id="connection-status" class="connection-status" role="status" aria-live="polite" hidden>
+            目前離線：行程、費用及備忘仍可使用；音樂名稱／封面辨識和外部連結需要網路。恢復連線後可重試。
+        </div>
+
+        <section class="hero">
+            <div class="hero-grid">
+                <div>
+                    <div class="pill" id="banner-destination">日本 · 北海道</div>
+                    <h2 id="banner-title">北海道 10 天雪國自駕之旅</h2>
+                    <div class="hero-meta">
+                        <span id="banner-dates">12/30 ～ 1/8</span>
+                        <span>大灣區航空 (GBA)</span>
+                        <span id="trip-status"></span>
+                    </div>
+                    <p id="banner-notes"></p>
+                </div>
+                <div class="stats">
+                    <div class="stat"><span>出發倒數</span><b id="countdown-days">--</b></div>
+                    <div class="stat"><span>行程地點</span><b id="stat-total-places">0</b></div>
+                    <div class="stat"><span>航班</span><b id="stat-total-flights">0</b></div>
+                </div>
+            </div>
+        </section>
+
+        <nav class="tabs no-print" role="tablist" aria-label="行程內容">
+            <button class="tab active" id="tab-btn-itinerary" role="tab" aria-selected="true" aria-controls="tab-itinerary" tabindex="0" onclick="switchTab('itinerary')">每日行程</button>
+            <button class="tab" id="tab-btn-flights" role="tab" aria-selected="false" aria-controls="tab-flights" tabindex="-1" onclick="switchTab('flights')">機票資訊</button>
+            <button class="tab" id="tab-btn-notes" role="tab" aria-selected="false" aria-controls="tab-notes" tabindex="-1" onclick="switchTab('notes')">備忘與清單</button>
+            <button class="tab" id="tab-btn-expenses" role="tab" aria-selected="false" aria-controls="tab-expenses" tabindex="-1" onclick="switchTab('expenses')">每日費用</button>
+        </nav>
+
+        <section id="tab-itinerary" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-itinerary">
+            <div class="toolbar">
+                <div class="days" id="day-selector-container"></div>
+                <div class="actions">
+                    <select id="category-filter" class="filter" aria-label="篩選行程類別" onchange="renderItinerary()">
+                        <option value="ALL">所有類別</option>
+                        <option value="Sightseeing">景點</option>
+                        <option value="Food">美食</option>
+                        <option value="Parking">停車</option>
+                        <option value="Hotel">飯店</option>
+                        <option value="Transport">交通</option>
+                        <option value="Shopping">購物</option>
+                    </select>
+                    <button class="btn-primary no-print" onclick="openAddPlaceModal()">新增地點</button>
+                </div>
+            </div>
+            <div id="itinerary-timeline" class="timeline"></div>
+        </section>
+
+        <section id="tab-flights" class="tab-content hidden" role="tabpanel" aria-labelledby="tab-btn-flights">
+            <div class="toolbar">
+                <h3 style="margin:0">大灣區航空機票</h3>
+                <button class="btn-primary no-print" onclick="openAddFlightModal()">新增航班</button>
+            </div>
+            <div id="flights-container" class="tickets"></div>
+        </section>
+
+        <section id="tab-notes" class="tab-content hidden" role="tabpanel" aria-labelledby="tab-btn-notes">
+            <div class="notes-layout">
+                <div>
+                    <div class="toolbar">
+                        <h3 style="margin:0">自駕與停車備忘</h3>
+                        <button class="btn-primary no-print" onclick="openAddNoteModal()">新增筆記</button>
+                    </div>
+                    <div id="notes-grid" class="notes-grid"></div>
+                </div>
+                <aside class="pack">
+                    <div class="toolbar">
+                        <h3 style="margin:0">需要準備的物品清單</h3>
+                        <span id="checklist-progress">0/0</span>
+                    </div>
+                        <div class="progress-wrap" role="progressbar" aria-label="物品清單完成進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="checklist-progressbar"><div class="progress" id="checklist-bar"></div></div>
+                    <div class="todo">
+                            <input id="new-todo-input" aria-label="新增需要準備的物品" placeholder="新增物品">
+                            <select id="new-todo-group" aria-label="物品準備方式">
+                                <option value="bring">帶</option>
+                                <option value="buy">買</option>
+                            </select>
+                            <button type="button" class="btn-primary" onclick="addChecklistItem()">加入</button>
+                    </div>
+                    <div id="checklist-items"></div>
+                </aside>
+            </div>
+        </section>
+
+        <section id="tab-expenses" class="tab-content hidden" role="tabpanel" aria-labelledby="tab-btn-expenses">
+            <div class="expense-music-layout">
+                <div class="expense-panel">
+                    <div class="toolbar">
+                        <div>
+                            <h3 style="margin:0">每日費用</h3>
+                            <p class="sub">以日圓 ¥ 記錄曉嵐、加安的支出，並自動計算每日及全程總額。</p>
+                        </div>
+                        <label class="expense-day-label">選擇日期
+                            <select id="expense-day-select" class="expense-day-select" aria-label="選擇費用日期" onchange="selectExpenseDay(this.value)"></select>
+                        </label>
+                    </div>
+                    <div id="expense-summary" class="expense-summary" aria-live="polite"></div>
+                    <form id="expense-form" class="expense-form" onsubmit="saveExpense(event)">
+                        <input type="hidden" id="expense-id">
+                        <label>由誰支付
+                            <select id="expense-person" required>
+                                <option value="曉嵐">曉嵐</option>
+                                <option value="加安">加安</option>
+                            </select>
+                        </label>
+                        <label>花費項目
+                            <input id="expense-item" maxlength="80" placeholder="例：晚餐、租車、停車費、住宿" required>
+                        </label>
+                        <label>類別
+                            <select id="expense-category" required>
+                                <option value="餐飲">餐飲</option>
+                                <option value="住宿">住宿</option>
+                                <option value="交通／租車／油費">交通／租車／油費</option>
+                                <option value="停車／門票">停車／門票</option>
+                                <option value="滑雪／活動">滑雪／活動</option>
+                                <option value="購物">購物</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </label>
+                        <label>金額（日圓）
+                            <input id="expense-amount" type="number" min="1" step="1" inputmode="numeric" placeholder="0" required>
+                        </label>
+                        <div class="expense-form-action">
+                            <button id="expense-submit" class="btn-primary">新增</button>
+                            <button id="expense-cancel" type="button" class="btn hidden" onclick="cancelExpenseEdit()">取消</button>
+                        </div>
+                    </form>
+                    <div id="expense-list" class="expense-list"></div>
+                    <p class="expense-footnote">「由誰支付」用來分別統計兩人的實際付款；共同消費請選擇實際付款者，並在項目中註明共同消費。全程總額不會重複計算。</p>
+                </div>
+                <aside class="music-panel" aria-labelledby="music-list-heading">
+                    <div class="toolbar">
+                        <div>
+                            <h3 id="music-list-heading" style="margin:0">Music list</h3>
+                            <p class="sub">貼上連結即可自動帶出曲名及封面（需連線）</p>
+                        </div>
+                        <span id="music-count" class="sub">0 項</span>
+                    </div>
+                    <form id="music-form" class="music-form" onsubmit="saveMusic(event)">
+                        <label>音樂連結
+                            <input id="music-url" type="url" inputmode="url" placeholder="貼上 Apple Music 或 YouTube 歌曲／播放清單連結" required>
+                        </label>
+                        <button id="music-submit" class="btn-primary" type="submit">加入音樂</button>
+                    </form>
+                    <form id="music-fallback" class="music-fallback" onsubmit="saveMusicManually(event)" hidden>
+                        <p id="music-fallback-message"></p>
+                        <label>音樂名稱
+                            <input id="music-fallback-title" maxlength="160" placeholder="輸入歌曲或播放清單名稱" required>
+                        </label>
+                        <label>歌手／頻道（選填）
+                            <input id="music-fallback-artist" maxlength="120" placeholder="輸入歌手或頻道名稱">
+                        </label>
+                        <div class="music-fallback-actions">
+                            <button class="btn-primary" type="submit">以此名稱加入</button>
+                            <button class="btn" type="button" onclick="retryMusicLookup()">重試自動辨識</button>
+                        </div>
+                    </form>
+                    <div id="music-list" class="music-list" aria-live="polite"></div>
+                </aside>
+            </div>
+        </section>
+    </div>
+
+    <nav class="nav-mobile no-print" aria-label="行程分頁">
+        <button id="m-tab-itinerary" class="active" aria-current="page" onclick="switchTab('itinerary')">行程</button>
+        <button id="m-tab-flights" onclick="switchTab('flights')">機票</button>
+        <button id="m-tab-notes" onclick="switchTab('notes')">備忘</button>
+        <button id="m-tab-expenses" onclick="switchTab('expenses')">費用</button>
+    </nav>
+
+    <div class="modal" id="modal-trip" role="dialog" aria-modal="true" aria-labelledby="trip-modal-heading" tabindex="-1" onclick="backdropClose(event,'modal-trip')">
+        <form class="sheet" onsubmit="saveTripOverview(event)">
+            <h3 id="trip-modal-heading">編輯旅程總覽</h3>
+            <div class="form-grid">
+                <label>旅程名稱<input id="input-trip-title" required></label>
+                <label>目的地<input id="input-trip-destination" required></label>
+                <div class="two">
+                    <label>出發日期<input type="date" id="input-trip-start" required></label>
+                    <label>回程日期<input type="date" id="input-trip-end" required></label>
+                </div>
+                <label>備註簡介<textarea id="input-trip-notes"></textarea></label>
+            </div>
+            <div class="row-end">
+                <button type="button" class="btn" onclick="closeModal('modal-trip')">取消</button>
+                <button class="btn-primary">儲存</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal" id="modal-place" role="dialog" aria-modal="true" aria-labelledby="place-modal-title" tabindex="-1" onclick="backdropClose(event,'modal-place')">
+        <form class="sheet" onsubmit="savePlace(event)">
+            <h3 id="place-modal-title">新增行程地點</h3>
+            <input type="hidden" id="place-id">
+            <div class="form-grid">
+                <label>天數 / 日期<select id="place-day"></select></label>
+                <div class="two">
+                    <label>時間<input id="place-time" placeholder="14:00 或 傍晚" required></label>
+                    <label>類別
+                        <select id="place-category">
+                            <option value="Sightseeing">景點</option>
+                            <option value="Food">美食</option>
+                            <option value="Parking">停車</option>
+                            <option value="Hotel">飯店</option>
+                            <option value="Transport">交通</option>
+                            <option value="Shopping">購物</option>
+                        </select>
+                    </label>
+                </div>
+                <label>名稱<input id="place-name" required></label>
+                <label>地點 Mapcode<input id="place-mapcode" placeholder="例如：9013179*63"></label>
+                <label>備忘 / 停車資訊<textarea id="place-notes"></textarea></label>
+            </div>
+            <div class="row-end">
+                <button type="button" class="btn" onclick="closeModal('modal-place')">取消</button>
+                <button class="btn-primary">儲存</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal" id="modal-flight" role="dialog" aria-modal="true" aria-labelledby="flight-modal-title" tabindex="-1" onclick="backdropClose(event,'modal-flight')">
+        <form class="sheet" onsubmit="saveFlight(event)">
+            <h3 id="flight-modal-title">新增航班</h3>
+            <input type="hidden" id="flight-id">
+            <div class="form-grid">
+                <div class="two">
+                    <label>航空公司<input id="flight-airline" required></label>
+                    <label>航班 / 航線<input id="flight-code" placeholder="HB540 或 HKG ➔ CTS" required></label>
+                </div>
+                <label>日期說明<input id="flight-date" placeholder="12月30日 (去程)"></label>
+                <div class="two">
+                    <label>出發<input id="flight-dep-airport" placeholder="HKG (香港)" required></label>
+                    <label>到達<input id="flight-arr-airport" placeholder="CTS (札幌)" required></label>
+                </div>
+                <div class="two">
+                    <label>出發時間<input id="flight-dep-time" required></label>
+                    <label>到達時間<input id="flight-arr-time" required></label>
+                </div>
+            </div>
+            <div class="row-end">
+                <button type="button" class="btn" onclick="closeModal('modal-flight')">取消</button>
+                <button class="btn-primary">儲存航班</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal" id="modal-note" role="dialog" aria-modal="true" aria-labelledby="note-modal-title" tabindex="-1" onclick="backdropClose(event,'modal-note')">
+        <form class="sheet" onsubmit="saveNote(event)">
+            <h3 id="note-modal-title">新增備忘</h3>
+            <input type="hidden" id="note-id">
+            <div class="form-grid">
+                <label>標題<input id="note-title" required></label>
+                <label>內容<textarea id="note-content" required></textarea></label>
+            </div>
+            <div class="row-end">
+                <button type="button" class="btn" onclick="closeModal('modal-note')">取消</button>
+                <button class="btn-primary">儲存</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal" id="modal-confirm" role="dialog" aria-modal="true" aria-labelledby="confirm-title" tabindex="-1" onclick="backdropClose(event,'modal-confirm')">
+        <div class="sheet">
+            <h3 id="confirm-title">確認</h3>
+            <p id="confirm-text" class="sub"></p>
+            <div class="row-end">
+                <button type="button" class="btn" onclick="closeModal('modal-confirm')">取消</button>
+                <button type="button" class="btn-primary" onclick="runConfirm()">確定</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+        <span id="toast-message"></span>
+        <button id="toast-action" class="toast-action hidden" type="button"></button>
+    </div>
+
+    <script>
+        const ICONS = {
+            moon: '<svg viewBox="0 0 24 24"><path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"/></svg>',
+            sun: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+            edit: '<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>',
+            trash: '<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>',
+            map: '<svg viewBox="0 0 24 24"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"/><path d="M9 3v15M15 6v15"/></svg>'
+        };
+
+        const HOKKAIDO_SAMPLE_DATA = {
+            sampleRevision: 6,
+            trip: {
+                title: "北海道 10 天雪國自駕之旅",
+                destination: "日本 · 北海道 (札幌 / 美瑛 / 洞爺湖 / 留壽都)",
+                startDate: "2026-12-30",
+                endDate: "2027-01-08",
+                notes: "雪地自駕請留意結冰路面及天候。Mapcode 以 mapcode.app 搜尋結果整理；出發前請核對導航目的地及冬季營業／道路開放狀況。"
+            },
+            flights: [
+                { id: 'f1', airline: '大灣區航空 (GBA AIRLINE)', code: 'HKG ➔ CTS', depAirport: 'HKG (香港國際機場)', arrAirport: 'CTS (札幌新千歲機場)', depTime: '08:00', arrTime: '13:00', date: '12月30日 (去程)' },
+                { id: 'f2', airline: '大灣區航空 (GBA AIRLINE)', code: 'CTS ➔ HKG', depAirport: 'CTS (札幌新千歲機場)', arrAirport: 'HKG (香港國際機場)', depTime: '16:00', arrTime: '21:15', date: '1月8日 (回程)' }
+            ],
+            places: [
+                { id: 'p1_1', day: 1, time: '13:00', name: '到達札幌新千歲機場 (CTS)', category: 'Transport', mapcode: '113683645*48', notes: '大灣區航空 08:00 - 13:00 抵達。', parkingOptions: [{ name: '租車公司取車處（分店未指定，Mapcode 待核實）', mapcode: '' }] },
+                { id: 'p1_2', day: 1, time: '15:00', name: '旅之酒店石狩 Check in', category: 'Hotel', mapcode: '9877519*00', notes: 'Tabino Hotel Ishikari。住客停車場入口尚未能從 Mapcode.app 獨立核實，請依酒店指示。', parkingOptions: [{ name: '旅之酒店石狩住客停車場（入口未核實）', mapcode: '' }] },
+                { id: 'p1_3', day: 1, time: '17:30', name: '晚餐：找東西吃／食蟹', category: 'Food', mapcode: '', notes: '餐廳分店尚未指定，因此暫不填 Mapcode；成吉思汗烤肉先列為備忘。', parkingOptions: [{ name: '餐廳附近停車場（餐廳分店未指定，Mapcode 待核實）', mapcode: '' }] },
+                { id: 'p1_4', day: 1, time: '19:30', name: '藻岩山夜景／纜車山麓站', category: 'Sightseeing', mapcode: '9400493*02', notes: '停車在藻岩山纜車山麓站入口附近，再搭纜車上山。', parkingOptions: [{ name: '山麓駅纜車駐車場', mapcode: '9400493*03' }, { name: 'Times 札幌藻岩山纜車山麓停車場下層', mapcode: '9400552*08' }] },
+                { id: 'p2_1', day: 2, time: '10:00', name: '自然醒／休息', category: 'Hotel', mapcode: '9877519*00', notes: '於旅之酒店石狩休息。住客停車場入口尚未能從 Mapcode.app 獨立核實，請依酒店指示。', parkingOptions: [{ name: '旅之酒店石狩住客停車場（入口未核實）', mapcode: '' }] },
+                { id: 'p2_2', day: 2, time: '12:00', name: '狸小路商店街', category: 'Shopping', mapcode: '9492533*85', notes: '附近停車場由 Mapcode.app 查得；用戶提供的 9492374*34 定位在南三条西五丁目，並非已核實的停車場入口。', parkingOptions: [{ name: 'Nanairo Parking Lot', mapcode: '9492562*65' }, { name: 'Urban Parking', mapcode: '9492441*83' }] },
+                { id: 'p2_3', day: 2, time: '15:00', name: '大通公園', category: 'Sightseeing', mapcode: '9522029*65', notes: '用戶提供的 9492374*34 定位在南三条西五丁目，並非已核實的停車場入口。以下停車場 Mapcode 由 Mapcode.app 查得，仍請按現場標示入場。', parkingOptions: [{ name: '札幌大通地下駐車場', mapcode: '9522058*60' }, { name: 'Sapporo Shiyakusho Parking Lot', mapcode: '9522146*16' }, { name: 'ほくほく札幌ビル駐車場', mapcode: '9492809*23' }] },
+                { id: 'p3_1', day: 3, time: '10:00', name: '頭大佛殿', category: 'Sightseeing', mapcode: '9013179*63', notes: '營業時間約 10:00–15:00；出發前確認當日開放。', parkingOptions: [{ name: '頭大佛殿停車場（Mapcode 未核實）', mapcode: '' }] },
+                { id: 'p3_2', day: 3, time: '12:00', name: '瀧野鈴蘭公園中央口停車場北', category: 'Sightseeing', mapcode: '9016174*17', notes: '玩雪／公園活動。地點 Mapcode 對應中央口停車場；其他入口另列作備選。', parkingOptions: [{ name: '瀧野鈴蘭公園中央口停車場', mapcode: '9016174*17' }, { name: '瀧野鈴蘭公園溪流口停車場', mapcode: '9016313*26' }, { name: '瀧野鈴蘭公園鱒見口停車場', mapcode: '9017278*66' }] },
+                { id: 'p3_3', day: 3, time: '14:00', name: '北海道神宮', category: 'Sightseeing', mapcode: '9487191*33', notes: '', parkingOptions: [{ name: '北海道神宮 北一条駐車場', mapcode: '9487339*05' }] },
+                { id: 'p4_1', day: 4, time: '10:00', name: '美馬牛 Christmas Tree', category: 'Sightseeing', mapcode: '349788233*58', notes: '停車資訊：附近停車，下車拍攝雪地孤獨樹景觀。請勿駛入農地或於道路違停。', parkingOptions: [] },
+                { id: 'p4_2', day: 4, time: '12:30', name: '白鬚瀑布', category: 'Sightseeing', mapcode: '796182575*36', notes: '', parkingOptions: [{ name: '白鬚瀑布公共駐車場', mapcode: '796182482*58' }] },
+                { id: 'p4_3', day: 4, time: '14:00', name: '美瑛青池', category: 'Sightseeing', mapcode: '349569815*28', notes: '', parkingOptions: [{ name: '青池停車場', mapcode: '349568748*75' }] },
+                { id: 'p4_4', day: 4, time: '16:00', name: '森林精靈露台', category: 'Sightseeing', mapcode: '919553455*58', notes: 'Mapcode.app 另列新富良野王子大飯店停車場作導航參考；停車場開放及實際入口請依現場指示。', parkingOptions: [{ name: 'Furano Prince Hotel 1 Parking Lot', mapcode: '919553393*18' }, { name: 'Shinfurano Prince Hotel Dai 2 Parking Lot', mapcode: '919553303*00' }] },
+                { id: 'p5_1', day: 5, time: '12:00', name: '小樽運河', category: 'Sightseeing', mapcode: '493690885*70', notes: '漫步運河街景。', parkingOptions: [{ name: '三井のリパーク 小樽運河第２ 駐車場', mapcode: '493690475*63' }] },
+                { id: 'p5_2', day: 5, time: '14:30', name: '小樽祝津全景展望台', category: 'Sightseeing', mapcode: '493841257*35', notes: '若雪況或路況不佳請勿上山；先確認道路開放及車況。鄰近小樽水族館的停車場 Mapcode 由 Mapcode.app 查得，請確認當日是否開放及可否使用。', parkingOptions: [{ name: 'Otarusuizokukan Daini Parking Lot', mapcode: '493841048*04' }, { name: 'Shukuzukuchi Parking Lot', mapcode: '493841157*70' }] },
+                { id: 'p5_3', day: 5, time: '16:30', name: '小樽運河藍調時刻點燈', category: 'Sightseeing', mapcode: '493690885*70', notes: '傍晚欣賞運河點燈。', parkingOptions: [{ name: '三井のリパーク 小樽運河第２ 駐車場', mapcode: '493690475*63' }] },
+                { id: 'p5_4', day: 5, time: '19:00', name: '返回旅之酒店石狩', category: 'Hotel', mapcode: '9877519*00', notes: '住客停車場入口尚未能從 Mapcode.app 獨立核實，請依酒店指示。', parkingOptions: [{ name: '旅之酒店石狩住客停車場（入口未核實）', mapcode: '' }] },
+                { id: 'p6_1', day: 6, time: '10:00', name: '旅之酒店石狩 Check out', category: 'Hotel', mapcode: '9877519*00', notes: '整理行李辦理退房。住客停車場入口尚未能從 Mapcode.app 獨立核實，請依酒店指示。', parkingOptions: [{ name: '旅之酒店石狩住客停車場（入口未核實）', mapcode: '' }] },
+                { id: 'p6_2', day: 6, time: '12:30', name: '登別地獄谷', category: 'Sightseeing', mapcode: '603288368*08', notes: '景點與收費停車場是不同位置，請依序輸入各自的 Mapcode。', parkingOptions: [{ name: '登別地獄谷駐車場（收費）', mapcode: '603287205*88' }] },
+                { id: 'p6_3', day: 6, time: '15:30', name: '洞爺湖鶴雅度假村 洸之謌 Check in', category: 'Hotel', mapcode: '321493107*20', notes: '享受溫泉飯店設施。', parkingOptions: [{ name: '洞爺湖鶴雅度假村住客停車場（入口未獨立核實）', mapcode: '' }] },
+                { id: 'p6_4', day: 6, time: '18:00', name: '晚餐：松前屋 Matsumaeya', category: 'Food', mapcode: '321519421*14', notes: '洞爺湖溫泉的松前屋。', parkingOptions: [{ name: 'Toyako Parking Lot', mapcode: '321518417*77' }] },
+                { id: 'p7_1', day: 7, time: '10:00', name: '洞爺湖鶴雅度假村 洸之謌 早餐', category: 'Hotel', mapcode: '321493107*20', notes: '', parkingOptions: [{ name: '洞爺湖鶴雅度假村住客停車場（入口未獨立核實）', mapcode: '' }] },
+                { id: 'p7_2', day: 7, time: '13:00', name: '昭和新山', category: 'Sightseeing', mapcode: '321432688*56', notes: '天晴時前往；景點及停車場 Mapcode 分開列出。', parkingOptions: [{ name: '有珠山・昭和新山停車場', mapcode: '321433526*58' }, { name: 'Showa Shinzan Bear Ranch 2nd Car park', mapcode: '321433357*56' }] },
+                { id: 'p8_1', day: 8, time: '11:00', name: '從洞爺湖鶴雅度假村 洸之謌出發', category: 'Transport', mapcode: '321493107*20', notes: '開車前往留壽都度假村。', parkingOptions: [] },
+                { id: 'p8_2', day: 8, time: '13:00', name: '留壽都度假村酒店及會議中心 Check in', category: 'Hotel', mapcode: '385288788*07', notes: '入住當日辦理雪具 Early pick-up，將裝備放入 locker；1/7 可直接取用滑雪。雪具櫃檯的獨立 Mapcode 尚未核實。TIEMS 租車會提供雪掃。住客停車入口請依酒店指示；另列的日歸停車場需先確認住客可否使用。', parkingOptions: [{ name: 'Rusutsu Resort Higaeri Parking Lot（日歸停車場，住客使用資格待確認）', mapcode: '385318116*85' }] },
+                { id: 'p9_1', day: 9, time: '09:00', name: '留壽都度假村全日滑雪／雪上活動', category: 'Sightseeing', mapcode: '385288788*07', notes: '使用前一日 early pick-up 並放在 locker 的裝備。停車場請依酒店指示；日歸停車場需先確認住客可否使用。', parkingOptions: [{ name: 'Rusutsu Resort Higaeri Parking Lot（日歸停車場，住客使用資格待確認）', mapcode: '385318116*85' }] },
+                { id: 'p10_1', day: 10, time: '10:00', name: '留壽都度假村 Check out，出發前往機場', category: 'Hotel', mapcode: '385288788*07', notes: '10:00 前退房，開車前往新千歲機場。住客停車入口請依酒店指示；日歸停車場需先確認住客可否使用。', parkingOptions: [{ name: 'Rusutsu Resort Higaeri Parking Lot（日歸停車場，住客使用資格待確認）', mapcode: '385318116*85' }] },
+                { id: 'p10_2', day: 10, time: '13:00', name: '抵達新千歲機場／還車及辦理登機', category: 'Transport', mapcode: '113683645*48', notes: '大灣區航空 16:00 起飛，21:15 抵港。', parkingOptions: [{ name: '租車公司還車處（分店未指定，Mapcode 待核實）', mapcode: '' }] }
+            ],
+            notes: [
+                { id: 'n1', title: '自駕與停車備忘', content: '1. 藻岩山：山麓駅纜車停車場 Mapcode 9400493*03；另有 Times 下層停車場 9400552*08。\n2. 大通公園：札幌大通地下駐車場 Mapcode 9522058*60；市役所停車場 9522146*16。用戶提供的 9492374*34 定位在南三条西五丁目，並非已核實的停車場入口。\n3. 北海道神宮：北一条駐車場 Mapcode 9487339*05。\n4. 白鬚瀑布：公共駐車場 Mapcode 796182482*58；青池停車場 Mapcode 349568748*75。\n5. 小樽運河：三井のリパーク 小樽運河第２ Mapcode 493690475*63。\n6. 旅之酒店石狩、洞爺湖鶴雅度假村住客停車場入口尚未能獨立核實，請依酒店指示；留壽都日歸停車場 Mapcode 385318116*85，使用資格需先向酒店確認。\n7. 美馬牛 Christmas Tree 周邊沒有核實到官方停車場，請勿在農地或道路違停。\n8. 冬季行車前確認道路、停車場及景點開放狀況；Mapcode.app 的景點座標不一定等於停車場入口。' },
+                { id: 'n2', title: '雪地自駕與租車提醒', content: 'TIEMS 會提供雪掃。\n租車時確認雪胎及防凍玻璃水；出發前清除車窗、車頂積雪，留意結冰路面並預留更長煞車距離。\n小樽祝津展望台及美瑛鄉間道路如遇大雪、結冰或封路，請取消或改道。' },
+                { id: 'n3', title: '航班與富士山觀景', content: '去程可留意飛機左側靠窗座位，起飛約 3.5–4 小時後可能看到富士山；回程可留意右側。航路、天氣及能見度會影響實際是否看得到，不作保證。\n去程：12/30，08:00 HKG → 13:00 CTS。\n回程：1/8，16:00 CTS → 21:15 HKG。' },
+                { id: 'n4', title: '餐飲備忘', content: '想吃食蟹及成吉思汗烤肉；餐廳分店尚未指定，確認店名後再補導航 Mapcode。\n1/4 晚餐安排松前屋 Matsumaeya。' }
+            ],
+            expenses: [],
+            checklist: [
+                { id: 'c1', text: '暖水壺', group: 'bring', done: false },
+                { id: 'c2', text: '潤膚膏／保濕用品', group: 'bring', done: false },
+                { id: 'c3', text: '厚長襪', group: 'bring', done: false },
+                { id: 'c4', text: '防水袋', group: 'bring', done: false },
+                { id: 'c5', text: '鞋用防水噴霧', group: 'bring', done: false },
+                { id: 'c6', text: '防凍玻璃水', group: 'buy', done: false },
+                { id: 'c7', text: '手套', group: 'buy', done: false },
+                { id: 'c8', text: '玩雪玩具', group: 'buy', done: false }
+            ]
+        };
+
+        const DAY_REGIONS = ['札幌／石狩','札幌','札幌','美瑛','小樽','洞爺湖','洞爺湖','留壽都','留壽都','留壽都'];
+        const CATEGORY = {
+            Sightseeing: { label: '景點', icon: '🏔️' },
+            Food: { label: '美食', icon: '🍜' },
+            Parking: { label: '停車', icon: '🚗' },
+            Hotel: { label: '飯店', icon: '🏨' },
+            Transport: { label: '交通', icon: '🚗' },
+            Shopping: { label: '購物', icon: '🛍️' }
+        };
+
+        let state = { trip: {}, flights: [], places: [], notes: [], expenses: [], music: [], checklist: [], selectedDay: 1 };
+        let pendingConfirm = null;
+        let openModalId = null;
+        let modalReturnFocus = null;
+        let previousBodyOverflow = '';
+        let checklistTouchTimer = null;
+        let checklistTouchStart = null;
+        let checklistTouchId = null;
+        let checklistDragId = null;
+        let pendingMusic = null;
+        const musicMetadataRequests = new Set();
+        const musicMetadataFailures = new Set();
+        let toastTimer = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            initTheme();
+            updateConnectionStatus();
+            renderAll();
+            window.addEventListener('online', updateConnectionStatus);
+            window.addEventListener('offline', updateConnectionStatus);
+            initMobileKeyboardHandling();
+            document.getElementById('new-todo-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') addChecklistItem();
+            });
+            document.getElementById('input-trip-start').addEventListener('input', () => {
+                const startInput = document.getElementById('input-trip-start');
+                const endInput = document.getElementById('input-trip-end');
+                endInput.min = startInput.value;
+                endInput.setCustomValidity('');
+            });
+            document.getElementById('input-trip-end').addEventListener('input', (e) => {
+                document.getElementById('input-trip-start').max = e.target.value;
+                e.target.setCustomValidity('');
+            });
+            document.addEventListener('keydown', (e) => {
+                const tab = e.target.closest('[role="tab"]');
+                if (tab && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+                    const current = tabs.indexOf(tab);
+                    const offset = e.key === 'ArrowRight' ? 1 : -1;
+                    const next = tabs[(current + offset + tabs.length) % tabs.length];
+                    e.preventDefault();
+                    switchTab(next.id.replace('tab-btn-', ''));
+                    next.focus();
+                    return;
+                }
+                if (e.key === 'Escape' && !openModalId) {
+                    const menu = document.getElementById('more-menu');
+                    if (menu.classList.contains('open')) {
+                        menu.classList.remove('open');
+                        document.getElementById('more-menu-toggle').setAttribute('aria-expanded', 'false');
+                        document.getElementById('more-menu-toggle').focus();
+                    }
+                    return;
+                }
+                if (!openModalId) return;
+                if (e.key === 'Escape') {
+                    closeModal(openModalId);
+                    return;
+                }
+                if (e.key === 'Tab') keepFocusInModal(e);
+            });
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#more-menu')) {
+                    document.getElementById('more-menu').classList.remove('open');
+                    document.getElementById('more-menu-toggle').setAttribute('aria-expanded', 'false');
+                } else if (e.target.closest('#more-menu-list')) {
+                    document.getElementById('more-menu').classList.remove('open');
+                    document.getElementById('more-menu-toggle').setAttribute('aria-expanded', 'false');
+                }
+                const target = e.target.closest('[data-action]');
+                if (!target) return;
+                const { action, id, day } = target.dataset;
+                if (action === 'select-day') selectDay(Number(day));
+                else if (action === 'add-place') openAddPlaceModal();
+                else if (action === 'edit-place') openEditPlaceModal(id);
+                else if (action === 'delete-place') deletePlace(id);
+                else if (action === 'edit-flight') openEditFlightModal(id);
+                else if (action === 'delete-flight') deleteFlight(id);
+                else if (action === 'edit-note') openEditNoteModal(id);
+                else if (action === 'delete-note') deleteNote(id);
+                else if (action === 'edit-expense') openEditExpense(id);
+                else if (action === 'delete-expense') deleteExpense(id);
+                else if (action === 'delete-music') deleteMusic(id);
+                else if (action === 'move-music') moveMusic(id, target.dataset.direction === 'up' ? -1 : 1);
+                else if (action === 'retry-music') retrySavedMusic(id);
+                else if (action === 'delete-checklist-item') deleteChecklistItem(id);
+                else if (action === 'move-checklist') moveChecklistItem(id, target.dataset.direction === 'up' ? -1 : 1);
+            });
+            document.addEventListener('change', (e) => {
+                const target = e.target.closest('[data-checklist-id]');
+                if (target) toggleChecklistItem(target.dataset.checklistId);
+            });
+            initChecklistReordering();
+        });
+
+        function icon(name) { return ICONS[name] || ''; }
+        function toggleMenu() {
+            const menu = document.getElementById('more-menu');
+            const open = menu.classList.toggle('open');
+            document.getElementById('more-menu-toggle').setAttribute('aria-expanded', open);
+        }
+        function toast(msg, duration = 2200, options = {}) {
+            const el = document.getElementById('toast');
+            const message = document.getElementById('toast-message');
+            const action = document.getElementById('toast-action');
+            if (toastTimer) clearTimeout(toastTimer);
+            el.classList.toggle('error', options.type === 'error');
+            el.classList.toggle('warning', options.type === 'warning');
+            el.setAttribute('role', options.type === 'error' ? 'alert' : 'status');
+            el.setAttribute('aria-live', options.type === 'error' ? 'assertive' : 'polite');
+            message.textContent = msg;
+            action.classList.toggle('hidden', !options.action);
+            action.textContent = options.action?.label || '';
+            action.onclick = options.action?.run || null;
+            el.style.display = 'flex';
+            if (duration > 0) toastTimer = setTimeout(() => { el.style.display = 'none'; }, duration);
+        }
+        function toastError(msg, options = {}) {
+            toast(msg, options.duration === undefined ? 6500 : options.duration, { ...options, type: 'error' });
+        }
+        function updateConnectionStatus() {
+            const status = document.getElementById('connection-status');
+            if (!status) return;
+            status.hidden = navigator.onLine;
+        }
+        function initMobileKeyboardHandling() {
+            const isMobile = matchMedia('(max-width: 520px)');
+            document.addEventListener('focusin', (event) => {
+                if (isMobile.matches && event.target.matches('input:not([type="hidden"]), select, textarea')) {
+                    document.body.classList.add('mobile-keyboard-open');
+                }
+            });
+            document.addEventListener('focusout', (event) => {
+                if (!event.target.matches('input:not([type="hidden"]), select, textarea')) return;
+                setTimeout(() => {
+                    const active = document.activeElement;
+                    if (!isMobile.matches || !active.matches('input:not([type="hidden"]), select, textarea')) {
+                        document.body.classList.remove('mobile-keyboard-open');
+                    }
+                }, 100);
+            });
+            isMobile.addEventListener('change', (event) => {
+                if (!event.matches) document.body.classList.remove('mobile-keyboard-open');
+            });
+        }
+        function musicNetworkError(error) {
+            if (!navigator.onLine) return '目前沒有網路連線；音樂連結已保留，請連線後重試，或手動輸入名稱加入。';
+            if (error instanceof TypeError || error.name === 'AbortError') {
+                return '無法連接音樂平台（可能是網路或平台暫時無回應）；請稍後重試，或手動輸入名稱加入。';
+            }
+            return `${error.message || '音樂平台暫時無法提供資料'}。請稍後重試，或手動輸入名稱加入。`;
+        }
+        function parseISO(value) {
+            if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+            const d = new Date(value + 'T00:00:00');
+            if (Number.isNaN(d.getTime())) return null;
+            const [year, month, day] = value.split('-').map(Number);
+            return d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day ? d : null;
+        }
+        function tripDayCount() {
+            const start = parseISO(state.trip.startDate);
+            const end = parseISO(state.trip.endDate);
+            if (!start || !end || end < start) return 10;
+            return Math.round((end - start) / 86400000) + 1;
+        }
+        function dayDate(day) {
+            const start = parseISO(state.trip.startDate);
+            if (!start) return null;
+            const d = new Date(start);
+            d.setDate(d.getDate() + day - 1);
+            return d;
+        }
+        function formatDayLabel(day) {
+            const d = dayDate(day);
+            if (!d) return `第 ${day} 天`;
+            const week = ['日','一','二','三','四','五','六'][d.getDay()];
+            return `${d.getMonth() + 1}/${d.getDate()} (${week})`;
+        }
+        function formatRange() {
+            const a = dayDate(1);
+            const b = dayDate(tripDayCount());
+            if (!a || !b) return '';
+            const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}`;
+            return `${fmt(a)} ～ ${fmt(b)}`;
+        }
+        function todayIndex() {
+            const start = parseISO(state.trip.startDate);
+            const end = parseISO(state.trip.endDate);
+            if (!start || !end) return null;
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            if (today < start || today > end) return null;
+            return Math.round((today - start) / 86400000) + 1;
+        }
+        function timeKey(value) {
+            const m = String(value || '').match(/(\d{1,2}):(\d{2})/);
+            return m ? Number(m[1]) * 60 + Number(m[2]) : 9999;
+        }
+        function splitAirport(text) {
+            const m = String(text || '').match(/^([A-Z]{3})\s*(?:\((.+)\))?/);
+            if (m) return { iata: m[1], city: m[2] || text };
+            return { iata: text, city: '' };
+        }
+        function mapsUrl(name) {
+            return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`;
+        }
+        function mapcodeUrl(name) {
+            return `https://mapcode.app/?q=${encodeURIComponent(name)}`;
+        }
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        function initTheme() {
+            let saved = null;
+            try {
+                saved = localStorage.getItem('theme');
+            } catch (error) {
+                console.error('Unable to read the saved theme preference.', error);
+            }
+            if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            updateThemeIcon();
+        }
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            try {
+                localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            } catch (error) {
+                console.error('Unable to save the theme preference.', error);
+                toastError('主題已切換，但瀏覽器拒絕儲存偏好設定；行程資料不受影響。');
+            }
+            updateThemeIcon();
+        }
+        function updateThemeIcon() {
+            document.getElementById('theme-icon').innerHTML =
+                document.documentElement.classList.contains('dark') ? ICONS.sun : ICONS.moon;
+        }
+
+        function loadState() {
+            let saved;
+            try {
+                saved = localStorage.getItem('hokkaido_planner_data');
+            } catch (error) {
+                console.error('Unable to read saved trip data.', error);
+                state = normalizeState(HOKKAIDO_SAMPLE_DATA);
+                toastError('無法讀取此瀏覽器中的行程資料，已暫時載入初始行程。不要恢復初始資料；請重新開啟原瀏覽器或匯入備份。', { duration: 0 });
+                return;
+            }
+            if (saved) {
+                try {
+                    const savedState = JSON.parse(saved);
+                    const hasParkingData = Array.isArray(savedState.places) &&
+                        savedState.places.some(place => place && Array.isArray(place.parkingOptions) && place.parkingOptions.length > 0);
+                    const hasUnnumberedDrivingMemo = Array.isArray(savedState.notes) && savedState.notes.some(note =>
+                        note && typeof note.title === 'string' && typeof note.content === 'string' &&
+                        note.title === '自駕與停車備忘' &&
+                        note.content.split(/\r?\n/).some(line => line.trim() && !/^\d+\.\s/.test(line))
+                    );
+                    state = normalizeState(savedState);
+                    if (hasParkingData || hasUnnumberedDrivingMemo) {
+                        try {
+                            localStorage.setItem('hokkaido_planner_data', JSON.stringify(state));
+                        } catch (error) {
+                            console.error('Unable to save trip data migration.', error);
+                            toastError('行程格式已更新，但瀏覽器無法儲存。請匯出備份、釋放儲存空間或檢查瀏覽器權限。', {
+                                duration: 0,
+                                action: { label: '匯出備份', run: exportData }
+                            });
+                        }
+                    }
+                    if (savedState.sampleRevision < HOKKAIDO_SAMPLE_DATA.sampleRevision && !hasParkingData && !hasUnnumberedDrivingMemo) {
+                        toast('已保留舊版本機行程；如需新版預設行程，請到「更多」選「恢復初始行程」', 6000, { type: 'warning' });
+                    }
+                    return;
+                } catch (error) {
+                    console.error('Saved trip data is invalid.', error);
+                    toastError(`本機行程資料格式有誤，已暫時載入初始行程；原資料沒有刪除。請嘗試匯入備份。${error.message ? `（${error.message}）` : ''}`, {
+                        duration: 0,
+                        action: { label: '匯入備份', run: () => document.getElementById('import-file').click() }
+                    });
+                }
+            }
+            state = normalizeState(HOKKAIDO_SAMPLE_DATA);
+        }
+        function normalizeState(raw) {
+            if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+                throw new Error('行程備份必須是 JSON 物件');
+            }
+            const sample = JSON.parse(JSON.stringify(HOKKAIDO_SAMPLE_DATA));
+            const assertRecord = (value, label) => {
+                if (!value || typeof value !== 'object' || Array.isArray(value)) {
+                    throw new Error(`${label}資料格式不正確`);
+                }
+                return value;
+            };
+            const assertString = (value, field, label) => {
+                if (typeof value !== 'string') throw new Error(`${label}的「${field}」必須是文字`);
+                return value;
+            };
+            const tripInput = raw.trip === undefined ? {} : assertRecord(raw.trip, '旅程');
+            const sampleRevision = raw.sampleRevision === undefined ? 1 : raw.sampleRevision;
+            if (!Number.isInteger(sampleRevision) || sampleRevision < 1) {
+                throw new Error('行程版本格式不正確');
+            }
+            const next = {
+            sampleRevision: HOKKAIDO_SAMPLE_DATA.sampleRevision,
+                trip: { ...sample.trip, ...tripInput },
+                flights: raw.flights === undefined ? sample.flights : raw.flights,
+                places: raw.places === undefined ? sample.places : raw.places,
+                notes: raw.notes === undefined ? sample.notes : raw.notes,
+                expenses: raw.expenses === undefined ? [] : raw.expenses,
+                music: raw.music === undefined ? [] : raw.music,
+                checklist: raw.checklist === undefined ? sample.checklist : raw.checklist,
+                selectedDay: raw.selectedDay
+            };
+            for (const field of ['title', 'destination', 'startDate', 'endDate', 'notes']) {
+                next.trip[field] = assertString(next.trip[field], field, '旅程');
+            }
+            const start = parseISO(next.trip.startDate);
+            const end = parseISO(next.trip.endDate);
+            if (!start || !end || end < start) throw new Error('旅程日期無效，或回程早於出發日期');
+            const max = Math.round((end - start) / 86400000) + 1;
+            const normalizeList = (list, label, fields, validate) => {
+                if (!Array.isArray(list)) throw new Error(`${label}必須是清單`);
+                const ids = new Set();
+                return list.map((item, index) => {
+                    assertRecord(item, `${label}第 ${index + 1} 項`);
+                    const id = assertString(item.id, 'id', `${label}第 ${index + 1} 項`);
+                    if (!id.trim() || ids.has(id)) throw new Error(`${label}的識別碼不可空白或重複`);
+                    ids.add(id);
+                    for (const field of fields) assertString(item[field], field, `${label}第 ${index + 1} 項`);
+                    validate(item, index);
+                    return item;
+                });
+            };
+            next.flights = normalizeList(next.flights, '航班', ['airline', 'code', 'depAirport', 'arrAirport', 'depTime', 'arrTime'], (flight, index) => {
+                if (flight.date !== undefined) assertString(flight.date, 'date', `航班第 ${index + 1} 項`);
+            });
+            next.places = normalizeList(next.places, '行程', ['time', 'name', 'category'], (place, index) => {
+                if (!Number.isInteger(place.day) || place.day < 1 || place.day > max) {
+                    throw new Error(`行程第 ${index + 1} 項的天數超出旅程日期範圍`);
+                }
+                if (!Object.prototype.hasOwnProperty.call(CATEGORY, place.category)) {
+                    throw new Error(`行程第 ${index + 1} 項的類別無效`);
+                }
+                place.notes = place.notes === undefined ? '' : assertString(place.notes, 'notes', `行程第 ${index + 1} 項`);
+                place.mapcode = place.mapcode === undefined ? '' : assertString(place.mapcode, 'mapcode', `行程第 ${index + 1} 項`);
+                place.mapcode = place.mapcode.replace(/\s/g, '');
+                if (place.mapcode && !/^\d{6,10}(?:\*\d{2})?$/.test(place.mapcode)) {
+                    throw new Error(`行程第 ${index + 1} 項的 Mapcode 格式無效`);
+                }
+                place.mapcodeNote = place.mapcodeNote === undefined
+                    ? ''
+                    : assertString(place.mapcodeNote, 'mapcodeNote', `行程第 ${index + 1} 項`);
+                delete place.parkingOptions;
+            });
+            next.notes = normalizeList(next.notes, '備忘', ['title', 'content'], () => {});
+            for (const note of next.notes) {
+                if (note.title !== '自駕與停車備忘') continue;
+                let itemNumber = 0;
+                note.content = note.content.split(/\r?\n/).map(line => {
+                    if (!line.trim()) return line;
+                    itemNumber += 1;
+                    return `${itemNumber}. ${line.replace(/^\d+\.\s*/, '')}`;
+                }).join('\n');
+            }
+            next.expenses = normalizeList(next.expenses, '每日費用', ['person', 'item', 'category'], (expense, index) => {
+                if (!Number.isInteger(expense.day) || expense.day < 1 || expense.day > max) {
+                    throw new Error(`每日費用第 ${index + 1} 項的日期超出旅程範圍`);
+                }
+                if (!['曉嵐', '加安'].includes(expense.person)) {
+                    throw new Error(`每日費用第 ${index + 1} 項的付款者無效`);
+                }
+                if (!['餐飲', '住宿', '交通／租車／油費', '停車／門票', '滑雪／活動', '購物', '其他'].includes(expense.category)) {
+                    throw new Error(`每日費用第 ${index + 1} 項的類別無效`);
+                }
+                if (!Number.isSafeInteger(expense.amount) || expense.amount < 1) {
+                    throw new Error(`每日費用第 ${index + 1} 項的金額必須是正整數日圓`);
+                }
+            });
+            next.music = normalizeList(next.music, 'Music list', ['title', 'provider', 'url'], (track, index) => {
+                if (!Number.isInteger(track.day) || track.day < 1 || track.day > max) {
+                    throw new Error(`Music list 第 ${index + 1} 項的日期超出旅程範圍`);
+                }
+                if (!['apple', 'youtube'].includes(track.provider) || musicProviderForUrl(track.url) !== track.provider) {
+                    throw new Error(`Music list 第 ${index + 1} 項的平台或連結無效`);
+                }
+                track.artist = track.artist === undefined ? '' : assertString(track.artist, 'artist', `Music list 第 ${index + 1} 項`);
+                track.artwork = track.artwork === undefined ? '' : assertString(track.artwork, 'artwork', `Music list 第 ${index + 1} 項`);
+                if (track.metadataManual === undefined) track.metadataManual = false;
+                if (typeof track.metadataManual !== 'boolean') {
+                    throw new Error(`Music list 第 ${index + 1} 項的辨識狀態無效`);
+                }
+                if (track.artwork && !isTrustedMusicArtwork(track.artwork)) {
+                    throw new Error(`Music list 第 ${index + 1} 項的封面圖片網址無效`);
+                }
+            });
+            next.checklist = normalizeList(next.checklist, '需要準備的物品清單', ['text'], (item, index) => {
+                if (typeof item.done !== 'boolean') throw new Error(`需要準備的物品清單第 ${index + 1} 項的完成狀態無效`);
+                if (item.group === undefined) item.group = 'bring';
+                if (!['bring', 'buy'].includes(item.group)) throw new Error(`需要準備的物品清單第 ${index + 1} 項的準備方式無效`);
+            });
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const todayDay = today >= start && today <= end
+                ? Math.round((today - start) / 86400000) + 1
+                : 1;
+            next.selectedDay = Number.isInteger(next.selectedDay) && next.selectedDay >= 1 && next.selectedDay <= max
+                ? next.selectedDay
+                : todayDay;
+            return next;
+        }
+        function saveState(nextState = state) {
+            let saved = true;
+            try {
+                localStorage.setItem('hokkaido_planner_data', JSON.stringify(nextState));
+                state = nextState;
+            } catch (error) {
+                saved = false;
+                console.error('Unable to save trip data.', error);
+                state = nextState;
+                const reason = error.name === 'QuotaExceededError'
+                    ? '瀏覽器儲存空間已滿'
+                    : error.name === 'SecurityError'
+                        ? '瀏覽器封鎖了本機儲存'
+                        : '瀏覽器無法寫入本機儲存';
+                toastError(`${reason}；這次變更目前只在此頁面暫存。請先匯出備份，再釋放空間或檢查網站儲存權限。`, {
+                    duration: 0,
+                    action: { label: '匯出備份', run: exportData }
+                });
+            }
+            renderAll();
+            return saved;
+        }
+        function resetToSampleData() {
+            askConfirm('恢復初始行程', '現有修訂會被覆蓋，確定嗎？', () => {
+                const sampleState = normalizeState(HOKKAIDO_SAMPLE_DATA);
+                sampleState.selectedDay = 1;
+                if (saveState(sampleState)) toast('已恢復初始行程');
+            });
+        }
+        function exportData() {
+            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            a.href = url;
+            a.download = 'hokkaido-trip.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            toast('已匯出備份');
+        }
+        function importData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const importedState = normalizeState(JSON.parse(reader.result));
+                    if (saveState(importedState)) toast('已匯入行程');
+                } catch (error) {
+                    console.error('Unable to import trip data.', error);
+                    toastError(`匯入失敗，現有行程沒有變更。${error.message || '請確認檔案是有效的行程 JSON 備份。'}`);
+                }
+            };
+            reader.onerror = () => {
+                console.error('Unable to read the selected backup file.', reader.error);
+                toastError('無法讀取這個備份檔；請確認檔案仍可存取，再重新選擇。');
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        }
+
+        function renderAll() {
+            renderTripBanner();
+            renderDaySelectors();
+            renderItinerary();
+            renderFlights();
+            renderNotes();
+            renderChecklist();
+            renderExpenses();
+        }
+        function renderTripBanner() {
+            document.getElementById('header-trip-title').textContent = state.trip.title;
+            document.getElementById('banner-title').textContent = state.trip.title;
+            document.getElementById('banner-destination').textContent = state.trip.destination;
+            document.getElementById('banner-dates').textContent = formatRange();
+            document.getElementById('banner-notes').textContent = state.trip.notes || '';
+            document.getElementById('stat-total-places').textContent = `${state.places.length} 個`;
+            document.getElementById('stat-total-flights').textContent = `${state.flights.length} 班`;
+            const today = new Date(); today.setHours(0,0,0,0);
+            const start = parseISO(state.trip.startDate);
+            const end = parseISO(state.trip.endDate);
+            const countdown = document.getElementById('countdown-days');
+            const status = document.getElementById('trip-status');
+            if (start && today < start) {
+                countdown.textContent = `${Math.ceil((start - today) / 86400000)} 天`;
+                status.textContent = '準備出發';
+            } else if (start && end && today >= start && today <= end) {
+                countdown.textContent = '旅程中';
+                status.textContent = `第 ${todayIndex()} 天`;
+            } else {
+                countdown.textContent = '已完結';
+                status.textContent = '';
+            }
+        }
+        function renderDaySelectors() {
+            const days = tripDayCount();
+            const today = todayIndex();
+            document.getElementById('day-selector-container').innerHTML = Array.from({ length: days }, (_, i) => {
+                const day = i + 1;
+                const count = state.places.filter(p => p.day === day).length;
+                const region = DAY_REGIONS[i] || '北海道';
+                return `<button type="button" class="day ${state.selectedDay === day ? 'active' : ''} ${today === day ? 'today' : ''}" data-action="select-day" data-day="${day}" aria-pressed="${state.selectedDay === day}">
+                    <small>${region}</small>
+                    <b>${formatDayLabel(day)}</b>
+                    <em>${count} 站</em>
+                </button>`;
+            }).join('');
+            const active = document.querySelector('.day.active');
+            if (active) active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+        }
+        function selectDay(day) {
+            state.selectedDay = day;
+            saveState();
+        }
+        function selectExpenseDay(day) {
+            const nextDay = Number(day);
+            if (!Number.isInteger(nextDay) || nextDay < 1 || nextDay > tripDayCount()) return;
+            state.selectedDay = nextDay;
+            saveState();
+        }
+        function renderItinerary() {
+            const cat = document.getElementById('category-filter').value;
+            let items = state.places.filter(p => p.day === state.selectedDay);
+            if (cat !== 'ALL') items = items.filter(p => p.category === cat);
+            items.sort((a, b) => timeKey(a.time) - timeKey(b.time));
+            const box = document.getElementById('itinerary-timeline');
+            if (!items.length) {
+                box.innerHTML = `<div class="empty">第 ${state.selectedDay} 天尚無行程<br><button type="button" class="btn" style="margin-top:12px" data-action="add-place">新增地點</button></div>`;
+                return;
+            }
+            box.innerHTML = items.map(item => {
+                const meta = CATEGORY[item.category] || { label: item.category, icon: '📍' };
+                const parking = item.category === 'Parking';
+                const mapcodeNote = item.mapcodeNote || (item.category === 'Food' ? '餐廳分店尚未指定' : '未核實，請確認目的地');
+                const mapcodeMarkup = `<div class="mapcodes">
+                    <div class="mapcode-entry"><span class="location-mapcode-label">📍 地點導航碼</span>${item.mapcode
+                        ? `<code>${escapeHtml(item.mapcode)}</code>`
+                        : `<span class="unverified">${escapeHtml(mapcodeNote)}</span>`}
+                        <div class="mapcode-links"><a href="${mapcodeUrl(item.name)}" target="_blank" rel="noopener noreferrer">Mapcode.app</a><a href="${mapsUrl(item.name)}" target="_blank" rel="noopener noreferrer">Google Maps</a></div>
+                    </div>
+                </div>`;
+                return `<article class="stop ${parking ? 'parking' : ''}">
+                    <div class="time">${escapeHtml(item.time)}</div>
+                    <div>
+                        <span class="badge c-${escapeHtml(item.category)}">${meta.icon} ${meta.label}</span>
+                        <h3>${escapeHtml(item.name)}</h3>
+                        ${item.notes ? `<div class="note-chip ${item.notes.startsWith('停車資訊：') ? 'parking-note' : ''}">${escapeHtml(item.notes)}</div>` : ''}
+                        ${mapcodeMarkup}
+                        <a class="map-link" href="${mapsUrl(item.name)}" target="_blank" rel="noopener">在地圖開啟</a>
+                    </div>
+                    <div class="ghost no-print">
+                        <button type="button" data-action="edit-place" data-id="${escapeHtml(item.id)}" aria-label="編輯地點：${escapeHtml(item.name)}">${icon('edit')}</button>
+                        <button type="button" data-action="delete-place" data-id="${escapeHtml(item.id)}" aria-label="刪除地點：${escapeHtml(item.name)}">${icon('trash')}</button>
+                    </div>
+                </article>`;
+            }).join('');
+        }
+        function renderFlights() {
+            const box = document.getElementById('flights-container');
+            if (!state.flights.length) {
+                box.innerHTML = `<div class="empty">尚未新增航班</div>`;
+                return;
+            }
+            box.innerHTML = state.flights.map(f => {
+                const dep = splitAirport(f.depAirport);
+                const arr = splitAirport(f.arrAirport);
+                return `<article class="ticket">
+                    <div class="ticket-top">
+                        <div>
+                            <strong>${escapeHtml(f.airline)}</strong>
+                            <div class="city">${escapeHtml(f.date || '')} · ${escapeHtml(f.code || '')}</div>
+                        </div>
+                        <div class="ghost no-print">
+                            <button type="button" data-action="edit-flight" data-id="${escapeHtml(f.id)}" aria-label="編輯航班：${escapeHtml(f.airline)}">${icon('edit')}</button>
+                            <button type="button" data-action="delete-flight" data-id="${escapeHtml(f.id)}" aria-label="刪除航班：${escapeHtml(f.airline)}">${icon('trash')}</button>
+                        </div>
+                    </div>
+                    <div class="route">
+                        <div><div class="iata">${escapeHtml(dep.iata)}</div><div class="city">${escapeHtml(dep.city)}</div><div class="clock">${escapeHtml(f.depTime)}</div></div>
+                        <div class="plane-line">➔</div>
+                        <div style="text-align:right"><div class="iata">${escapeHtml(arr.iata)}</div><div class="city">${escapeHtml(arr.city)}</div><div class="clock">${escapeHtml(f.arrTime)}</div></div>
+                    </div>
+                </article>`;
+            }).join('');
+        }
+        function renderNotes() {
+            const box = document.getElementById('notes-grid');
+            if (!state.notes.length) {
+                box.innerHTML = `<div class="empty">暫無筆記</div>`;
+                return;
+            }
+            box.innerHTML = state.notes.map(n => `
+                <article class="note-card">
+                    <div class="ghost no-print" style="float:right">
+                        <button type="button" data-action="edit-note" data-id="${escapeHtml(n.id)}" aria-label="編輯備忘：${escapeHtml(n.title)}">${icon('edit')}</button>
+                        <button type="button" data-action="delete-note" data-id="${escapeHtml(n.id)}" aria-label="刪除備忘：${escapeHtml(n.title)}">${icon('trash')}</button>
+                    </div>
+                    <h3>${escapeHtml(n.title)}</h3>
+                    <p>${escapeHtml(n.content)}</p>
+                </article>`).join('');
+        }
+        function formatYen(amount) {
+            return new Intl.NumberFormat('zh-HK', {
+                style: 'currency',
+                currency: 'JPY',
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+        function renderExpenses() {
+            const daySelect = document.getElementById('expense-day-select');
+            if (!daySelect) return;
+            const days = tripDayCount();
+            daySelect.innerHTML = Array.from({ length: days }, (_, index) => {
+                const day = index + 1;
+                const region = DAY_REGIONS[index] || '北海道';
+                return `<option value="${day}" ${day === state.selectedDay ? 'selected' : ''}>${formatDayLabel(day)} · ${region}</option>`;
+            }).join('');
+            renderMusicList();
+
+            const dailyExpenses = state.expenses.filter(expense => expense.day === state.selectedDay);
+            const totalFor = (person, expenses) => expenses
+                .filter(expense => expense.person === person)
+                .reduce((sum, expense) => sum + expense.amount, 0);
+            const dayTotal = dailyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const tripTotal = state.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+            document.getElementById('expense-summary').innerHTML = `
+                <div class="expense-total"><span>曉嵐 · 當日</span><strong>${formatYen(totalFor('曉嵐', dailyExpenses))}</strong></div>
+                <div class="expense-total"><span>加安 · 當日</span><strong>${formatYen(totalFor('加安', dailyExpenses))}</strong></div>
+                <div class="expense-total"><span>當日總費用</span><strong>${formatYen(dayTotal)}</strong></div>
+                <div class="expense-total"><span>曉嵐 · 全程</span><strong>${formatYen(totalFor('曉嵐', state.expenses))}</strong></div>
+                <div class="expense-total"><span>加安 · 全程</span><strong>${formatYen(totalFor('加安', state.expenses))}</strong></div>
+                <div class="expense-total"><span>全程總費用</span><strong>${formatYen(tripTotal)}</strong></div>`;
+
+            const box = document.getElementById('expense-list');
+            if (!dailyExpenses.length) {
+                box.innerHTML = `<div class="empty">${formatDayLabel(state.selectedDay)} 尚未記錄費用</div>`;
+                return;
+            }
+            box.innerHTML = dailyExpenses.map(expense => `
+                <article class="expense-row">
+                    <span class="expense-person">${escapeHtml(expense.person)}</span>
+                    <span class="expense-description">${escapeHtml(expense.item)}<small>${escapeHtml(expense.category)}</small></span>
+                    <span class="expense-amount">${formatYen(expense.amount)}</span>
+                    <span class="expense-row-actions no-print">
+                        <button type="button" data-action="edit-expense" data-id="${escapeHtml(expense.id)}" aria-label="編輯費用：${escapeHtml(expense.item)}">${icon('edit')}</button>
+                        <button type="button" data-action="delete-expense" data-id="${escapeHtml(expense.id)}" aria-label="刪除費用：${escapeHtml(expense.item)}" title="刪除">✕</button>
+                    </span>
+                </article>`).join('');
+        }
+        function musicProviderForUrl(value) {
+            let url;
+            try {
+                url = new URL(value);
+            } catch {
+                return null;
+            }
+            if (url.protocol !== 'https:' || url.username || url.password) return null;
+            const host = url.hostname.toLowerCase();
+            if (host === 'music.apple.com') return 'apple';
+            if (host === 'youtube.com' || host.endsWith('.youtube.com') || host === 'youtu.be') return 'youtube';
+            return null;
+        }
+        function isTrustedMusicArtwork(value) {
+            let url;
+            try {
+                url = new URL(value);
+            } catch {
+                return false;
+            }
+            if (url.protocol !== 'https:' || url.username || url.password) return false;
+            const host = url.hostname.toLowerCase();
+            return host === 'mzstatic.com' || host.endsWith('.mzstatic.com') ||
+                host === 'ytimg.com' || host.endsWith('.ytimg.com');
+        }
+        function canonicalMusicUrl(value, provider) {
+            const url = new URL(value);
+            url.hash = '';
+            if (provider === 'youtube') {
+                for (const parameter of ['feature', 'si', 'app', 'pp']) url.searchParams.delete(parameter);
+                if (url.searchParams.has('v') || url.hostname.toLowerCase() === 'youtu.be') {
+                    for (const parameter of ['list', 'index', 'start', 'start_radio']) url.searchParams.delete(parameter);
+                }
+            } else {
+                for (const parameter of ['uo', 'itscg', 'itsct', 'ls', 'at']) url.searchParams.delete(parameter);
+            }
+            url.searchParams.sort();
+            return url.href;
+        }
+        function musicLinkExists(url, day, excludeId = '') {
+            const provider = musicProviderForUrl(url);
+            const canonical = canonicalMusicUrl(url, provider);
+            return state.music.some(track => track.day === day && track.id !== excludeId &&
+                canonicalMusicUrl(track.url, track.provider) === canonical);
+        }
+        async function fetchMusicMetadata(provider, value) {
+            const request = async (url) => {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 10000);
+                try {
+                    const response = await fetch(url, { signal: controller.signal });
+                    if (!response.ok) throw new Error(`音樂平台回應錯誤（${response.status}）`);
+                    return await response.json();
+                } finally {
+                    clearTimeout(timeout);
+                }
+            };
+            const link = new URL(value);
+            let data;
+            if (provider === 'apple') {
+                const trackId = link.searchParams.get('i');
+                const id = trackId || link.pathname.match(/\/(\d+)\/?$/)?.[1];
+                if (!id || !/^\d+$/.test(id)) {
+                    throw new Error('Apple Music 歌曲／專輯可自動辨識；播放清單可在下方手動輸入名稱加入');
+                }
+                const lookup = await request(`https://itunes.apple.com/lookup?id=${encodeURIComponent(id)}&entity=song`);
+                const results = Array.isArray(lookup.results) ? lookup.results : [];
+                data = (trackId && results.find(item => String(item.trackId) === trackId)) || results[0];
+                if (!data || !(data.trackName || data.collectionName) || !data.artworkUrl100) {
+                    throw new Error('找不到這首 Apple Music 歌曲或專輯的資料');
+                }
+                data = {
+                    title: data.trackName || data.collectionName,
+                    artist: data.artistName || '',
+                    artwork: data.artworkUrl100.replace(/\/\d+x\d+bb(?=\.)/, '/600x600bb')
+                };
+            } else {
+                const host = link.hostname.toLowerCase();
+                const videoPath = /^\/(?:shorts|embed|live)\/[^/]+/.test(link.pathname);
+                const hasVideo = (host === 'youtu.be' && link.pathname.length > 1) ||
+                    (link.pathname === '/watch' && Boolean(link.searchParams.get('v'))) || videoPath;
+                if (link.pathname === '/playlist' || (link.searchParams.has('list') && !hasVideo)) {
+                    throw new Error('YouTube 播放清單連結已保留；請在下方輸入播放清單名稱加入');
+                }
+                const metadata = await request(`https://www.youtube.com/oembed?format=json&url=${encodeURIComponent(link.href)}`);
+                if (!metadata.title || !metadata.thumbnail_url) {
+                    throw new Error('找不到這段 YouTube 音樂的名稱或封面');
+                }
+                data = { title: metadata.title, artist: metadata.author_name || '', artwork: metadata.thumbnail_url };
+            }
+            if (!isTrustedMusicArtwork(data.artwork)) {
+                throw new Error('音樂平台回傳的封面圖片網址無效');
+            }
+            return data;
+        }
+        function renderMusicList() {
+            const dailyTracks = state.music.filter(track => track.day === state.selectedDay);
+            document.getElementById('music-count').textContent = `${dailyTracks.length} 項`;
+            const box = document.getElementById('music-list');
+            if (!dailyTracks.length) {
+                box.innerHTML = `<div class="empty">這一天尚未加入音樂</div>`;
+                return;
+            }
+            box.innerHTML = dailyTracks.map(track => {
+                const index = dailyTracks.findIndex(item => item.id === track.id);
+                const providerName = track.provider === 'apple' ? 'Apple Music' : 'YouTube';
+                if (!track.artwork && !track.metadataManual) refreshMusicMetadata(track);
+                return `<article class="music-row">
+                    <span class="music-artwork" aria-hidden="true">${track.artwork
+                        ? `♫<img src="${escapeHtml(track.artwork)}" alt="" loading="lazy" onerror="this.remove()">`
+                        : '♫'}</span>
+                    <div class="music-row-info">
+                        <a href="${escapeHtml(track.url)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(track.title)}">${escapeHtml(track.title)}</a>
+                        <small>${escapeHtml(track.artist || providerName)}${track.artist ? ` · ${providerName}` : ''}</small>
+                    </div>
+                    <span class="music-row-actions no-print">
+                        ${!track.artwork ? `<button type="button" data-action="retry-music" data-id="${escapeHtml(track.id)}" aria-label="重新辨識音樂：${escapeHtml(track.title)}" title="重新辨識音樂">↻</button>` : ''}
+                        <button type="button" data-action="move-music" data-id="${escapeHtml(track.id)}" data-direction="up" aria-label="將「${escapeHtml(track.title)}」上移" title="上移" ${index === 0 ? 'disabled' : ''}>↑</button>
+                        <button type="button" data-action="move-music" data-id="${escapeHtml(track.id)}" data-direction="down" aria-label="將「${escapeHtml(track.title)}」下移" title="下移" ${index === dailyTracks.length - 1 ? 'disabled' : ''}>↓</button>
+                        <button class="music-delete" type="button" data-action="delete-music" data-id="${escapeHtml(track.id)}" aria-label="刪除音樂：${escapeHtml(track.title)}" title="刪除">✕</button>
+                    </span>
+                </article>`;
+            }).join('');
+        }
+        async function refreshMusicMetadata(track) {
+            if (musicMetadataRequests.has(track.id) || musicMetadataFailures.has(track.id)) return;
+            musicMetadataRequests.add(track.id);
+            try {
+                const metadata = await fetchMusicMetadata(track.provider, track.url);
+                const current = state.music.find(item => item.id === track.id);
+                if (!current || current.artwork) return;
+                current.title = metadata.title;
+                current.artist = metadata.artist;
+                current.artwork = metadata.artwork;
+                current.metadataManual = false;
+                saveState();
+            } catch (error) {
+                musicMetadataFailures.add(track.id);
+                console.error('Unable to refresh saved music details.', error);
+                toastError(`無法取得「${track.title}」的音樂資訊。${musicNetworkError(error)}`, {
+                    action: { label: '重試', run: () => retrySavedMusic(track.id) }
+                });
+            } finally {
+                musicMetadataRequests.delete(track.id);
+            }
+        }
+        async function saveMusic(event) {
+            event.preventDefault();
+            const button = document.getElementById('music-submit');
+            if (button.disabled) return;
+            const url = document.getElementById('music-url').value.trim();
+            const provider = musicProviderForUrl(url);
+            const targetDay = state.selectedDay;
+            if (!provider) {
+                toastError('連結格式不正確。請貼上以 https:// 開頭的 Apple Music 或 YouTube 歌曲／播放清單網址。');
+                return;
+            }
+            if (musicLinkExists(url, targetDay)) {
+                toast('這個連結已在今天的 Music list，無須重複加入。', 4500, { type: 'warning' });
+                return;
+            }
+            button.disabled = true;
+            button.textContent = '正在辨識音樂…';
+            pendingMusic = { url: canonicalMusicUrl(url, provider), provider, day: targetDay };
+            const fallback = document.getElementById('music-fallback');
+            fallback.hidden = true;
+            try {
+                const metadata = await fetchMusicMetadata(provider, url);
+                if (musicLinkExists(url, targetDay)) {
+                    pendingMusic = null;
+                    document.getElementById('music-form').reset();
+                    toast('這個連結已在今天的 Music list，無須重複加入。', 4500, { type: 'warning' });
+                    return;
+                }
+                state.music.push({
+                    id: `m_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+                    day: targetDay,
+                    title: metadata.title,
+                    artist: metadata.artist,
+                    artwork: metadata.artwork,
+                    metadataManual: false,
+                    provider,
+                    url: pendingMusic.url
+                });
+                document.getElementById('music-form').reset();
+                pendingMusic = null;
+                if (saveState()) toast('已自動加入音樂名稱和封面');
+            } catch (error) {
+                document.getElementById('music-fallback-message').textContent =
+                    `無法自動辨識音樂。${musicNetworkError(error)} 原連結已保留。`;
+                document.getElementById('music-fallback-title').value = '';
+                document.getElementById('music-fallback-artist').value = '';
+                fallback.hidden = false;
+                document.getElementById('music-fallback-title').focus();
+            } finally {
+                button.disabled = false;
+                button.textContent = '加入音樂';
+            }
+        }
+        function saveMusicManually(event) {
+            event.preventDefault();
+            if (!pendingMusic) {
+                toastError('音樂連結已失效。請重新貼上 Apple Music 或 YouTube 連結後再加入。');
+                document.getElementById('music-fallback').hidden = true;
+                return;
+            }
+            if (pendingMusic.day !== state.selectedDay) {
+                toastError('加入音樂前日期已變更。請確認目前日期，再重新貼上連結。');
+                pendingMusic = null;
+                document.getElementById('music-fallback').hidden = true;
+                return;
+            }
+            if (musicLinkExists(pendingMusic.url, pendingMusic.day)) {
+                toast('這個連結已在今天的 Music list，無須重複加入。', 4500, { type: 'warning' });
+                return;
+            }
+            const title = document.getElementById('music-fallback-title').value.trim();
+            if (!title) {
+                document.getElementById('music-fallback-title').reportValidity();
+                return;
+            }
+            const id = `m_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+            state.music.push({
+                id,
+                day: pendingMusic.day,
+                title,
+                artist: document.getElementById('music-fallback-artist').value.trim(),
+                artwork: '',
+                metadataManual: true,
+                provider: pendingMusic.provider,
+                url: pendingMusic.url
+            });
+            musicMetadataFailures.add(id);
+            pendingMusic = null;
+            document.getElementById('music-form').reset();
+            document.getElementById('music-fallback').reset();
+            document.getElementById('music-fallback').hidden = true;
+            if (saveState()) toast('音樂已加入；封面資訊可稍後重新辨識');
+        }
+        function retryMusicLookup() {
+            if (!pendingMusic) return;
+            const url = pendingMusic.url;
+            document.getElementById('music-fallback').hidden = true;
+            document.getElementById('music-url').value = url;
+            document.getElementById('music-form').requestSubmit();
+        }
+        function retrySavedMusic(id) {
+            const track = state.music.find(item => item.id === id);
+            if (!track) return;
+            musicMetadataFailures.delete(id);
+            refreshMusicMetadata(track);
+        }
+        function moveMusic(id, direction) {
+            const track = state.music.find(item => item.id === id);
+            if (!track) return;
+            const dayTracks = state.music.filter(item => item.day === track.day);
+            const index = dayTracks.findIndex(item => item.id === id);
+            const target = dayTracks[index + direction];
+            if (!target) return;
+            const from = state.music.indexOf(track);
+            const to = state.music.indexOf(target);
+            [state.music[from], state.music[to]] = [state.music[to], state.music[from]];
+            saveState();
+        }
+        function deleteMusic(id) {
+            const track = state.music.find(item => item.id === id);
+            if (!track) return;
+            askConfirm('刪除音樂', `確定從 Music list 刪除「${track.title}」？`, () => {
+                state.music = state.music.filter(item => item.id !== id);
+                saveState();
+            });
+        }
+        function openEditExpense(id) {
+            const expense = state.expenses.find(item => item.id === id);
+            if (!expense) return;
+            state.selectedDay = expense.day;
+            document.getElementById('expense-id').value = expense.id;
+            document.getElementById('expense-person').value = expense.person;
+            document.getElementById('expense-item').value = expense.item;
+            document.getElementById('expense-category').value = expense.category;
+            document.getElementById('expense-amount').value = expense.amount;
+            document.getElementById('expense-submit').textContent = '儲存';
+            document.getElementById('expense-cancel').classList.remove('hidden');
+            renderExpenses();
+            document.getElementById('expense-item').focus();
+        }
+        function cancelExpenseEdit() {
+            document.getElementById('expense-form').reset();
+            document.getElementById('expense-id').value = '';
+            document.getElementById('expense-submit').textContent = '新增';
+            document.getElementById('expense-cancel').classList.add('hidden');
+        }
+        function saveExpense(event) {
+            event.preventDefault();
+            const item = document.getElementById('expense-item').value.trim();
+            const amount = Number(document.getElementById('expense-amount').value);
+            if (!item || !Number.isSafeInteger(amount) || amount < 1) {
+                toastError('金額或項目不正確。請填寫花費項目，並輸入大於 0 的整數日圓金額。');
+                return;
+            }
+            const id = document.getElementById('expense-id').value ||
+                `e_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+            const expense = {
+                id,
+                day: state.selectedDay,
+                person: document.getElementById('expense-person').value,
+                item,
+                category: document.getElementById('expense-category').value,
+                amount
+            };
+            const index = state.expenses.findIndex(entry => entry.id === id);
+            if (index >= 0) state.expenses[index] = expense;
+            else state.expenses.push(expense);
+            cancelExpenseEdit();
+            saveState();
+            toast(index >= 0 ? '費用已更新' : '費用已新增');
+        }
+        function deleteExpense(id) {
+            const expense = state.expenses.find(item => item.id === id);
+            if (!expense) return;
+            askConfirm('刪除費用', `確定刪除「${expense.item}」${formatYen(expense.amount)}？`, () => {
+                state.expenses = state.expenses.filter(item => item.id !== id);
+                saveState();
+            });
+        }
+        function renderChecklist() {
+            const total = state.checklist.length;
+            const done = state.checklist.filter(i => i.done).length;
+            const percent = total ? Math.round((done / total) * 100) : 0;
+            document.getElementById('checklist-progress').textContent = `${done}/${total}`;
+            document.getElementById('checklist-progressbar').setAttribute('aria-valuenow', percent);
+            document.getElementById('checklist-progressbar').setAttribute('aria-valuetext', `${done}/${total} 項已完成`);
+            document.getElementById('checklist-bar').style.width = `${percent}%`;
+            const supportsNativeDrag = matchMedia('(hover: hover) and (pointer: fine)').matches;
+            document.getElementById('checklist-items').innerHTML = state.checklist.map(item => `
+                <div class="check-row ${item.done ? 'done' : ''}" data-checklist-row="${escapeHtml(item.id)}" draggable="${supportsNativeDrag}">
+                    <input type="checkbox" data-checklist-id="${escapeHtml(item.id)}" aria-label="${escapeHtml(item.text)}" ${item.done ? 'checked' : ''}>
+                    <span class="item-text">${escapeHtml(item.text)}</span>
+                    <span class="item-group">${item.group === 'buy' ? '買' : '帶'}</span>
+                    <button type="button" class="move-item" data-action="move-checklist" data-id="${escapeHtml(item.id)}" data-direction="up" aria-label="將「${escapeHtml(item.text)}」上移">↑</button>
+                    <button type="button" class="move-item" data-action="move-checklist" data-id="${escapeHtml(item.id)}" data-direction="down" aria-label="將「${escapeHtml(item.text)}」下移">↓</button>
+                    <button type="button" class="btn-del" data-action="delete-checklist-item" data-id="${escapeHtml(item.id)}" aria-label="刪除清單項目：${escapeHtml(item.text)}" title="刪除">✕</button>
+                </div>`).join('') || '<p class="sub" style="text-align:center;padding:12px 0;">清單還是空的</p>';
+        }
+
+        function initChecklistReordering() {
+            const list = document.getElementById('checklist-items');
+            list.addEventListener('dragstart', (e) => {
+                const row = e.target.closest('[data-checklist-row]');
+                if (!row) return;
+                checklistDragId = row.dataset.checklistRow;
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', checklistDragId);
+                row.classList.add('dragging');
+            });
+            list.addEventListener('dragover', (e) => {
+                if (!checklistDragId) return;
+                e.preventDefault();
+                reorderChecklistAt(e.clientY, checklistDragId);
+            });
+            list.addEventListener('drop', (e) => e.preventDefault());
+            list.addEventListener('dragend', finishChecklistReorder);
+            list.addEventListener('touchstart', (e) => {
+                const row = e.target.closest('[data-checklist-row]');
+                if (!row || e.target.closest('button, input')) return;
+                const touch = e.changedTouches[0];
+                checklistTouchStart = { x: touch.clientX, y: touch.clientY };
+                const id = row.dataset.checklistRow;
+                clearTimeout(checklistTouchTimer);
+                checklistTouchTimer = setTimeout(() => {
+                    checklistTouchId = id;
+                    checklistDragId = id;
+                    row.classList.add('dragging');
+                }, 450);
+            }, { passive: true });
+            list.addEventListener('touchmove', (e) => {
+                const touch = e.changedTouches[0];
+                if (!checklistTouchId) {
+                    if (checklistTouchStart && Math.hypot(
+                        touch.clientX - checklistTouchStart.x,
+                        touch.clientY - checklistTouchStart.y
+                    ) > 10) clearTimeout(checklistTouchTimer);
+                    return;
+                }
+                e.preventDefault();
+                reorderChecklistAt(touch.clientY, checklistTouchId);
+            }, { passive: false });
+            const endTouch = () => {
+                clearTimeout(checklistTouchTimer);
+                checklistTouchStart = null;
+                checklistTouchId = null;
+                if (checklistDragId) finishChecklistReorder();
+            };
+            list.addEventListener('touchend', endTouch);
+            list.addEventListener('touchcancel', endTouch);
+        }
+
+        function reorderChecklistAt(y, id) {
+            const list = document.getElementById('checklist-items');
+            const dragged = list.querySelector(`[data-checklist-row="${CSS.escape(id)}"]`);
+            const rows = Array.from(list.querySelectorAll('[data-checklist-row]')).filter(row => row !== dragged);
+            const target = rows.find(row => {
+                const rect = row.getBoundingClientRect();
+                return y < rect.top + rect.height / 2;
+            });
+            list.querySelectorAll('.drag-over').forEach(row => row.classList.remove('drag-over'));
+            if (!dragged) return;
+            if (target) {
+                target.classList.add('drag-over');
+                list.insertBefore(dragged, target);
+            } else {
+                list.appendChild(dragged);
+            }
+        }
+
+        function finishChecklistReorder() {
+            if (!checklistDragId) return;
+            const list = document.getElementById('checklist-items');
+            list.querySelectorAll('.dragging, .drag-over').forEach(row => row.classList.remove('dragging', 'drag-over'));
+            const byId = new Map(state.checklist.map(item => [item.id, item]));
+            state.checklist = Array.from(list.querySelectorAll('[data-checklist-row]'))
+                .map(row => byId.get(row.dataset.checklistRow))
+                .filter(Boolean);
+            checklistDragId = null;
+            saveState();
+        }
+
+        function switchTab(key) {
+            if (!['itinerary', 'flights', 'notes', 'expenses'].includes(key)) return;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${key}`).classList.remove('hidden');
+            document.querySelectorAll('.tab').forEach(el => {
+                const selected = el.id === `tab-btn-${key}`;
+                el.classList.toggle('active', selected);
+                el.setAttribute('aria-selected', selected);
+                el.tabIndex = selected ? 0 : -1;
+            });
+            document.querySelectorAll('.nav-mobile button').forEach(el => {
+                const selected = el.id === `m-tab-${key}`;
+                el.classList.toggle('active', selected);
+                if (selected) el.setAttribute('aria-current', 'page');
+                else el.removeAttribute('aria-current');
+            });
+        }
+        function openModal(id) {
+            if (!openModalId) {
+                modalReturnFocus = document.activeElement;
+                previousBodyOverflow = document.body.style.overflow;
+                document.body.style.overflow = 'hidden';
+            }
+            openModalId = id;
+            const modal = document.getElementById(id);
+            modal.classList.add('open');
+            const firstField = modal.querySelector('input:not([type="hidden"]), textarea, select, button');
+            (firstField || modal).focus();
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+            if (openModalId !== id) return;
+            openModalId = null;
+            document.body.style.overflow = previousBodyOverflow;
+            if (modalReturnFocus && document.contains(modalReturnFocus)) modalReturnFocus.focus();
+            modalReturnFocus = null;
+        }
+        function keepFocusInModal(e) {
+            const modal = document.getElementById(openModalId);
+            const focusable = Array.from(modal.querySelectorAll(
+                'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            )).filter(el => el.getClientRects().length);
+            if (!focusable.length) {
+                e.preventDefault();
+                modal.focus();
+                return;
+            }
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey && (document.activeElement === first || document.activeElement === modal)) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
+        function backdropClose(e, id) {
+            if (e.target.id === id) closeModal(id);
+        }
+        function askConfirm(title, text, fn) {
+            pendingConfirm = fn;
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-text').textContent = text;
+            openModal('modal-confirm');
+        }
+        function runConfirm() {
+            const fn = pendingConfirm;
+            pendingConfirm = null;
+            closeModal('modal-confirm');
+            if (fn) fn();
+        }
+
+        function openEditTripModal() {
+            document.getElementById('input-trip-title').value = state.trip.title || '';
+            document.getElementById('input-trip-destination').value = state.trip.destination || '';
+            document.getElementById('input-trip-start').value = state.trip.startDate || '';
+            document.getElementById('input-trip-end').value = state.trip.endDate || '';
+            document.getElementById('input-trip-end').min = state.trip.startDate || '';
+            document.getElementById('input-trip-start').max = state.trip.endDate || '';
+            document.getElementById('input-trip-end').setCustomValidity('');
+            document.getElementById('input-trip-notes').value = state.trip.notes || '';
+            openModal('modal-trip');
+        }
+        function saveTripOverview(e) {
+            e.preventDefault();
+            const trip = {
+                title: document.getElementById('input-trip-title').value,
+                destination: document.getElementById('input-trip-destination').value,
+                startDate: document.getElementById('input-trip-start').value,
+                endDate: document.getElementById('input-trip-end').value,
+                notes: document.getElementById('input-trip-notes').value
+            };
+            const start = parseISO(trip.startDate);
+            const end = parseISO(trip.endDate);
+            const endInput = document.getElementById('input-trip-end');
+            if (!start || !end || end < start) {
+                endInput.setCustomValidity('回程日期不能早於出發日期，且必須是有效日期');
+                endInput.reportValidity();
+                return;
+            }
+            const dayCount = Math.round((end - start) / 86400000) + 1;
+            if (state.places.some(place => place.day > dayCount) || state.expenses.some(expense => expense.day > dayCount)) {
+                endInput.setCustomValidity('目前有行程或費用記錄超出新的日期範圍，請先調整資料或延長旅程日期');
+                endInput.reportValidity();
+                return;
+            }
+            endInput.setCustomValidity('');
+            state.trip = trip;
+            state.selectedDay = Math.min(state.selectedDay, dayCount);
+            closeModal('modal-trip');
+            saveState();
+        }
+        function populateDayDropdown(selected) {
+            const days = tripDayCount();
+            document.getElementById('place-day').innerHTML = Array.from({ length: days }, (_, i) => {
+                const day = i + 1;
+                return `<option value="${day}" ${day === Number(selected) ? 'selected' : ''}>${formatDayLabel(day)}</option>`;
+            }).join('');
+        }
+        function openAddPlaceModal() {
+            document.getElementById('place-modal-title').textContent = '新增行程地點';
+            document.getElementById('place-id').value = '';
+            document.getElementById('place-time').value = '10:00';
+            document.getElementById('place-name').value = '';
+            document.getElementById('place-mapcode').value = '';
+            document.getElementById('place-notes').value = '';
+            document.getElementById('place-category').value = 'Sightseeing';
+            populateDayDropdown(state.selectedDay);
+            openModal('modal-place');
+        }
+        function openEditPlaceModal(id) {
+            const p = state.places.find(item => item.id === id);
+            if (!p) return;
+            document.getElementById('place-modal-title').textContent = '編輯行程地點';
+            document.getElementById('place-id').value = p.id;
+            document.getElementById('place-time').value = p.time;
+            document.getElementById('place-category').value = p.category;
+            document.getElementById('place-name').value = p.name;
+            document.getElementById('place-mapcode').value = p.mapcode || '';
+            document.getElementById('place-notes').value = p.notes;
+            populateDayDropdown(p.day);
+            openModal('modal-place');
+        }
+        function savePlace(e) {
+            e.preventDefault();
+            const mapcode = canonicalMapcode(document.getElementById('place-mapcode').value);
+            if (mapcode === null) {
+                toastError('Mapcode 格式無效。請輸入 6–10 位數字，或在末尾加上 * 與兩位數字。');
+                return;
+            }
+            const id = document.getElementById('place-id').value;
+            const place = {
+                id: id || 'p_' + Date.now(),
+                day: Number(document.getElementById('place-day').value),
+                time: document.getElementById('place-time').value,
+                category: document.getElementById('place-category').value,
+                name: document.getElementById('place-name').value,
+                mapcode,
+                mapcodeNote: '',
+                notes: document.getElementById('place-notes').value
+            };
+            const idx = state.places.findIndex(p => p.id === place.id);
+            if (idx >= 0) state.places[idx] = place;
+            else state.places.push(place);
+            closeModal('modal-place');
+            saveState();
+        }
+        function deletePlace(id) {
+            askConfirm('刪除地點', '確定刪除這個行程點嗎？', () => {
+                state.places = state.places.filter(p => p.id !== id);
+                saveState();
+            });
+        }
+        function openAddFlightModal() {
+            document.getElementById('flight-modal-title').textContent = '新增航班';
+            ['flight-id','flight-airline','flight-code','flight-date','flight-dep-airport','flight-arr-airport','flight-dep-time','flight-arr-time']
+                .forEach(id => document.getElementById(id).value = '');
+            openModal('modal-flight');
+        }
+        function openEditFlightModal(id) {
+            const f = state.flights.find(x => x.id === id);
+            if (!f) return;
+            document.getElementById('flight-modal-title').textContent = '編輯航班';
+            document.getElementById('flight-id').value = f.id;
+            document.getElementById('flight-airline').value = f.airline;
+            document.getElementById('flight-code').value = f.code;
+            document.getElementById('flight-date').value = f.date || '';
+            document.getElementById('flight-dep-airport').value = f.depAirport;
+            document.getElementById('flight-arr-airport').value = f.arrAirport;
+            document.getElementById('flight-dep-time').value = f.depTime;
+            document.getElementById('flight-arr-time').value = f.arrTime;
+            openModal('modal-flight');
+        }
+        function saveFlight(e) {
+            e.preventDefault();
+            const id = document.getElementById('flight-id').value || 'f_' + Date.now();
+            const flight = {
+                id,
+                airline: document.getElementById('flight-airline').value,
+                code: document.getElementById('flight-code').value,
+                date: document.getElementById('flight-date').value || '自訂航班',
+                depAirport: document.getElementById('flight-dep-airport').value,
+                arrAirport: document.getElementById('flight-arr-airport').value,
+                depTime: document.getElementById('flight-dep-time').value,
+                arrTime: document.getElementById('flight-arr-time').value
+            };
+            const idx = state.flights.findIndex(f => f.id === id);
+            if (idx >= 0) state.flights[idx] = flight;
+            else state.flights.push(flight);
+            closeModal('modal-flight');
+            saveState();
+        }
+        function deleteFlight(id) {
+            askConfirm('刪除航班', '確定刪除此航班？', () => {
+                state.flights = state.flights.filter(f => f.id !== id);
+                saveState();
+            });
+        }
+        function openAddNoteModal() {
+            document.getElementById('note-modal-title').textContent = '新增備忘';
+            document.getElementById('note-id').value = '';
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-content').value = '';
+            openModal('modal-note');
+        }
+        function openEditNoteModal(id) {
+            const n = state.notes.find(x => x.id === id);
+            if (!n) return;
+            document.getElementById('note-modal-title').textContent = '編輯備忘';
+            document.getElementById('note-id').value = n.id;
+            document.getElementById('note-title').value = n.title;
+            document.getElementById('note-content').value = n.content;
+            openModal('modal-note');
+        }
+        function saveNote(e) {
+            e.preventDefault();
+            const id = document.getElementById('note-id').value || 'n_' + Date.now();
+            const note = {
+                id,
+                title: document.getElementById('note-title').value,
+                content: document.getElementById('note-content').value
+            };
+            const idx = state.notes.findIndex(n => n.id === id);
+            if (idx >= 0) state.notes[idx] = note;
+            else state.notes.push(note);
+            closeModal('modal-note');
+            saveState();
+        }
+        function deleteNote(id) {
+            askConfirm('刪除筆記', '確定刪除這則備忘？', () => {
+                state.notes = state.notes.filter(n => n.id !== id);
+                saveState();
+            });
+        }
+        function addChecklistItem() {
+            const input = document.getElementById('new-todo-input');
+            const val = input.value.trim();
+            if (!val) return;
+            state.checklist.push({
+                id: 'c_' + Date.now(),
+                text: val,
+                group: document.getElementById('new-todo-group').value,
+                done: false
+            });
+            input.value = '';
+            saveState();
+        }
+        function moveChecklistItem(id, offset) {
+            const index = state.checklist.findIndex(item => item.id === id);
+            const destination = index + offset;
+            if (index < 0 || destination < 0 || destination >= state.checklist.length) return;
+            const [item] = state.checklist.splice(index, 1);
+            state.checklist.splice(destination, 0, item);
+            saveState();
+        }
+        function toggleChecklistItem(id) {
+            const item = state.checklist.find(i => i.id === id);
+            if (item) { item.done = !item.done; saveState(); }
+        }
+        function deleteChecklistItem(id) {
+            state.checklist = state.checklist.filter(i => i.id !== id);
+            saveState();
+        }
+        function canonicalMapcode(value) {
+            const mapcode = String(value || '').replace(/\s/g, '');
+            return !mapcode || /^\d{6,10}(?:\*\d{2})?$/.test(mapcode) ? mapcode : null;
+        }
+    </script>
+</body>
+</html>
